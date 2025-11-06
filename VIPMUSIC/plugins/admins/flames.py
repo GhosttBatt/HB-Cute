@@ -116,6 +116,7 @@ def flames_result(name1, name2):
 
 
 # --- CREATE POSTER ---
+"""
 def make_poster(image_url, name1, name2, title, percentage):
     try:
         # Try to download background image
@@ -125,6 +126,29 @@ def make_poster(image_url, name1, name2, title, percentage):
     except Exception as e:
         print(f"[FLAMES] Image download failed: {e}")
         # Use solid color fallback background
+        bg = Image.new("RGB", (900, 600), (255, 192, 203))
+
+    bg = bg.resize((900, 600)).filter(ImageFilter.GaussianBlur(4))
+    stat = ImageStat.Stat(bg)
+    brightness = sum(stat.mean[:3]) / 3
+    text_color = "black" if brightness > 130 else "white"
+"""
+async def make_poster(image_url, name1, name2, title, percentage):
+    bg = None
+    try:
+        # Async image download
+        async with aiohttp.ClientSession() as session:
+            async with session.get(image_url, timeout=10) as resp:
+                if resp.status == 200:
+                    content = await resp.read()
+                    bg = Image.open(io.BytesIO(content)).convert("RGB")
+                else:
+                    print(f"[FLAMES] Image download failed: {resp.status}")
+    except Exception as e:
+        print(f"[FLAMES] Image download failed: {e}")
+    
+    # Fallback background
+    if bg is None:
         bg = Image.new("RGB", (900, 600), (255, 192, 203))
 
     bg = bg.resize((900, 600)).filter(ImageFilter.GaussianBlur(4))
