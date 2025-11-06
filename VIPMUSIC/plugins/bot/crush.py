@@ -55,7 +55,7 @@ SHAYRI = [ "**𝑵𝒆𝒆 𝑷𝒂𝒓𝒌𝒖𝒎 𝑷𝒐𝒅𝒉𝒖 😍�
          ]
 
 # Command
-SHAYRI_COMMAND = ["/crush"]
+SHAYRI_COMMAND = ["crush"]
 
 @app.on_message(
     filters.command(SHAYRI_COMMAND) & filters.group
