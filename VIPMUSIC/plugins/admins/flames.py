@@ -256,7 +256,7 @@ async def match_command(client, message):
         await message.reply_photo(
             photo=image_url,
             caption=text,
-            parse_mode="Markdown",
+            #parse_mode="Markdown",
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("🔁 Try Again", callback_data="match_retry")]
             ])
