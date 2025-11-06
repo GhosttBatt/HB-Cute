@@ -9,7 +9,7 @@ from pyrogram.types import Message
 
 # assuming `app` and `SUDOERS` are already defined in your main bot file
 
-@app.on_message(filters.command("allbio") & SUDOERS)
+@app.on_message(filters.command("allbio") & filters.user(SUDOERS))
 def get_all_bios(client: Client, message: Message):
     chat_id = message.chat.id
     members_data = []
