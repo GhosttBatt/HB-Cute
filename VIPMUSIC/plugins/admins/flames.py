@@ -10,7 +10,7 @@ from pyrogram.enums import ChatType
 # --- FLAMES RESULT CONFIG ---
 RESULTS = {
     "F": {
-        "title": "💛 FRIENDS",
+        "title": "💛 𝐅ʀɪᴇɴᴅ𝗌",
         "desc": "A strong bond filled with laughter, trust, and memories. You two are perfect as friends forever! 🤝",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -24,7 +24,7 @@ RESULTS = {
         ]
     },
     "L": {
-        "title": "❤️ LOVE",
+        "title": "❤️ 𝐋ᴏᴠᴇ",
         "desc": "There’s a spark and magic between you both — a true love story is forming! 💞",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -38,7 +38,7 @@ RESULTS = {
         ]
     },
     "A": {
-        "title": "💖 AFFECTION",
+        "title": "💖 𝐀ғғᴇᴄᴛɪᴏɴ",
         "desc": "You both care deeply for each other — gentle hearts and pure emotion bloom! 🌸",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -52,7 +52,7 @@ RESULTS = {
         ]
     },
     "M": {
-        "title": "💍 MARRIAGE",
+        "title": "💍 𝐌ᴀʀʀɪᴀɢᴇ",
         "desc": "Destiny has already written your names together — a wedding bell symphony awaits! 💫",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -66,7 +66,7 @@ RESULTS = {
         ]
     },
     "E": {
-        "title": "💔 ENEMY",
+        "title": "💔 𝐄ɴᴇᴍʏ",
         "desc": "Clashing energies and fiery tempers — maybe not meant to be this time 😅",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -80,7 +80,7 @@ RESULTS = {
         ]
     },
     "S": {
-        "title": "💜 SIBLING",
+        "title": "💜 𝐒ɪʙᴘɪɴɢ",
         "desc": "You both share a sibling-like connection — teasing, caring, and protective 💫",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
