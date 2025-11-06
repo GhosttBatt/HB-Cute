@@ -12,54 +12,84 @@ RESULTS = {
         "title": "💛 FRIENDS",
         "desc": "A strong bond filled with laughter, trust, and memories. You two are perfect as friends forever! 🤝",
         "images": [
-            "https://i.imgur.com/9tZw7rA.jpg",
-            "https://i.imgur.com/p7vQ7qB.jpg",
-            "https://i.imgur.com/3knlO8V.jpg"
+            "https://files.catbox.moe/mus8qn.jpg",
+"https://files.catbox.moe/n7t6ma.jpg",
+"https://files.catbox.moe/tb66lq.jpg",
+"https://files.catbox.moe/imwrq4.jpg",
+"https://files.catbox.moe/3u3dcp.jpg",
+"https://files.catbox.moe/70fnlf.jpg",
+"https://files.catbox.moe/i8r1dm.jpg",
+"https://files.catbox.moe/5u11yx.jpg"
         ]
     },
     "L": {
         "title": "❤️ LOVE",
         "desc": "There’s a spark and magic between you both — a true love story is forming! 💞",
         "images": [
-            "https://i.imgur.com/ECKcJ9N.jpg",
-            "https://i.imgur.com/csXYLFA.jpg",
-            "https://i.imgur.com/DdA0SKL.jpg"
+            "https://files.catbox.moe/mus8qn.jpg",
+            "https://files.catbox.moe/n7t6ma.jpg",
+            "https://files.catbox.moe/tb66lq.jpg",
+            "https://files.catbox.moe/imwrq4.jpg",
+            "https://files.catbox.moe/3u3dcp.jpg",
+            "https://files.catbox.moe/70fnlf.jpg",
+            "https://files.catbox.moe/i8r1dm.jpg",
+            "https://files.catbox.moe/5u11yx.jpg"
         ]
     },
     "A": {
         "title": "💖 AFFECTION",
         "desc": "You both care deeply for each other — gentle hearts and pure emotion bloom! 🌸",
         "images": [
-            "https://i.imgur.com/RH6fTVt.jpg",
-            "https://i.imgur.com/KjI2GQO.jpg",
-            "https://i.imgur.com/ByZqvCg.jpg"
+            "https://files.catbox.moe/mus8qn.jpg",
+"https://files.catbox.moe/n7t6ma.jpg",
+"https://files.catbox.moe/tb66lq.jpg",
+"https://files.catbox.moe/imwrq4.jpg",
+"https://files.catbox.moe/3u3dcp.jpg",
+"https://files.catbox.moe/70fnlf.jpg",
+"https://files.catbox.moe/i8r1dm.jpg",
+"https://files.catbox.moe/5u11yx.jpg"
         ]
     },
     "M": {
         "title": "💍 MARRIAGE",
         "desc": "Destiny has already written your names together — a wedding bell symphony awaits! 💫",
         "images": [
-            "https://i.imgur.com/rc7iXqv.jpg",
-            "https://i.imgur.com/YPO5uup.jpg",
-            "https://i.imgur.com/UmWesWf.jpg"
+            "https://files.catbox.moe/mus8qn.jpg",
+"https://files.catbox.moe/n7t6ma.jpg",
+"https://files.catbox.moe/tb66lq.jpg",
+"https://files.catbox.moe/imwrq4.jpg",
+"https://files.catbox.moe/3u3dcp.jpg",
+"https://files.catbox.moe/70fnlf.jpg",
+"https://files.catbox.moe/i8r1dm.jpg",
+"https://files.catbox.moe/5u11yx.jpg"
         ]
     },
     "E": {
         "title": "💔 ENEMY",
         "desc": "Clashing energies and fiery tempers — maybe not meant to be this time 😅",
         "images": [
-            "https://i.imgur.com/TMJQdKx.jpg",
-            "https://i.imgur.com/x9U34sz.jpg",
-            "https://i.imgur.com/NHtu6bF.jpg"
+            "https://files.catbox.moe/mus8qn.jpg",
+"https://files.catbox.moe/n7t6ma.jpg",
+"https://files.catbox.moe/tb66lq.jpg",
+"https://files.catbox.moe/imwrq4.jpg",
+"https://files.catbox.moe/3u3dcp.jpg",
+"https://files.catbox.moe/70fnlf.jpg",
+"https://files.catbox.moe/i8r1dm.jpg",
+"https://files.catbox.moe/5u11yx.jpg"
         ]
     },
     "S": {
         "title": "💜 SIBLING",
         "desc": "You both share a sibling-like connection — teasing, caring, and protective 💫",
         "images": [
-            "https://i.imgur.com/qTh7HLJ.jpg",
-            "https://i.imgur.com/jW7bKjT.jpg",
-            "https://i.imgur.com/4XQFXD4.jpg"
+            "https://files.catbox.moe/mus8qn.jpg",
+"https://files.catbox.moe/n7t6ma.jpg",
+"https://files.catbox.moe/tb66lq.jpg",
+"https://files.catbox.moe/imwrq4.jpg",
+"https://files.catbox.moe/3u3dcp.jpg",
+"https://files.catbox.moe/70fnlf.jpg",
+"https://files.catbox.moe/i8r1dm.jpg",
+"https://files.catbox.moe/5u11yx.jpg"
         ]
     }
 }
@@ -110,7 +140,7 @@ def make_poster(image_url, name1, name2, title, percentage):
     draw_centered_text(530, "✨ Made with ❤️ by Flames Bot", font_small)
 
     bio = io.BytesIO()
-    bio.name = "flames_poster.jpg"
+    bio.name = "ANNIEMUSIC/assets/annie/hb-welcome.jpg"
     bg.save(bio, "JPEG")
     bio.seek(0)
     return bio
