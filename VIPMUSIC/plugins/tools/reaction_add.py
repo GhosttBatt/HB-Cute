@@ -4,8 +4,8 @@ from pyrogram import filters
 from pyrogram.types import Message
 from VIPMUSIC import app
 from config import BANNED_USERS, MENTION_USERNAMES, START_REACTIONS
-from VIPMUSIC.utils.database import mongodb, get_sudoers, add_sudo, remove_sudo
-from VIPMUSIC.misc import SUDOERS, db
+from VIPMUSIC.utils.database import mongodb
+from VIPMUSIC.misc import SUDOERS
 
 # =================== DATABASE COLLECTION ===================
 COLLECTION = mongodb["reaction_mentions"]
@@ -29,10 +29,9 @@ asyncio.get_event_loop().create_task(load_custom_mentions())
 # =================== PERMISSION CHECK ===================
 async def is_admin_or_sudo(client, message: Message) -> bool:
     """Check if the user is admin or in sudoers."""
-    sudoers = await get_sudoers()
     user_id = message.from_user.id
 
-    if user_id in sudoers or user_id == app.id:
+    if user_id in SUDOERS or user_id == app.id:
         return True
 
     if message.chat.type in ["group", "supergroup"]:
