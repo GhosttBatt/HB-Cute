@@ -143,11 +143,11 @@ async def make_poster(image_url, name1, name2, title, percentage):
                     content = await resp.read()
                     bg = Image.open(io.BytesIO(content)).convert("RGB")
                 else:
-                    print(f"[FLAMES] Image download failed: {resp.status}")
+                    print(f"[FLAMES] Image download failed: HTTP {resp.status}")
     except Exception as e:
         print(f"[FLAMES] Image download failed: {e}")
-    
-    # Fallback background
+
+    # fallback background
     if bg is None:
         bg = Image.new("RGB", (900, 600), (255, 192, 203))
 
@@ -175,7 +175,7 @@ async def make_poster(image_url, name1, name2, title, percentage):
     draw_centered_text(530, "˙⋆✮ мᴀᴅᴇ ᴡɪᴛʜ ❤️ 𝐇в-𝐅ᴀᴍ ✮⋆˙") #, font_small)
 
     bio = io.BytesIO()
-    bio.name = "ANNIEMUSIC/assets/annie/ANNIECP.png" #"flames_result.jpg"   
+    bio.name = "flames_result.jpg"   
     bg.save(bio, "JPEG")
     bio.seek(0)
     return bio
