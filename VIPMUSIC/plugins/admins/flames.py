@@ -13,6 +13,7 @@ from pyrogram.enums import ChatType
 RESULTS = {
     "F": {
         "title": "💛 𝐅ʀɪᴇɴᴅ𝗌",
+        "title_cap": "Friends",
         "desc": "A strong bond filled with laughter, trust, and memories. You two are perfect as friends forever! 🤝",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -27,6 +28,7 @@ RESULTS = {
     },
     "L": {
         "title": "❤️ 𝐋ᴏᴠᴇ",
+        "title_cap": "Love",
         "desc": "There’s a spark and magic between you both — a true love story is forming! 💞",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -41,6 +43,7 @@ RESULTS = {
     },
     "A": {
         "title": "💖 𝐀ғғᴇᴄᴛɪᴏɴ",
+        "title_cap": "Affection",
         "desc": "You both care deeply for each other — gentle hearts and pure emotion bloom! 🌸",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -55,6 +58,7 @@ RESULTS = {
     },
     "M": {
         "title": "💍 𝐌ᴀʀʀɪᴀɢᴇ",
+        "title_cap": "Marriage",
         "desc": "Destiny has already written your names together — a wedding bell symphony awaits! 💫",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -69,6 +73,7 @@ RESULTS = {
     },
     "E": {
         "title": "💔 𝐄ɴᴇᴍʏ",
+        "titlr": "Ememy",
         "desc": "Clashing energies and fiery tempers — maybe not meant to be this time 😅",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -82,7 +87,8 @@ RESULTS = {
         ]
     },
     "S": {
-        "title": "💜 𝐒ɪʙᴘɪɴɢ",
+        "title": "💜 𝐒ɪʙʟɪɴɢ𝗌",
+        "title_cap": "Siblings",
         "desc": "You both share a sibling-like connection — teasing, caring, and protective 💫",
         "images": [
             "https://files.catbox.moe/mus8qn.jpg",
@@ -118,7 +124,7 @@ def flames_result(name1, name2):
 
 
 # --- CREATE POSTER ---
-def make_poster(image_url, name1, name2, title, percentage):
+def make_poster(image_url, name1, name2, title_cap, percentage):
     try:
         # Try to download background image
         response = requests.get(image_url, timeout=10)
@@ -153,9 +159,9 @@ def make_poster(image_url, name1, name2, title, percentage):
     
     draw_centered_text(40, "𝑭 𖹭 𝑳 𖹭 𝑨 𖹭 𝑴 𖹭 𝑬 𖹭 𝑺", font_title)
     draw_centered_text(170, f"✰ {name1.title()} ❤️ {name2.title()} ✰", font_text)
-    draw_centered_text(270, f"✰ Result: {title}", font_text)
+    draw_centered_text(270, f"✰ Result: {title_cap}", font_text)
     draw_centered_text(360, f"⋆.✰ ̊ Compatibility: {percentage}%", font_small)
-    draw_centered_text(530, "˙⋆✮ мᴀᴅᴇ ᴡɪᴛʜ ❤️ 𝐇в-𝐅ᴀᴍ ✮⋆˙", font_fancy)
+    draw_centered_text(530, "˙⋆✮ Made With ❤️ @HeartBeat_Fam ✮⋆˙", font_fancy)
 
     bio = io.BytesIO()
     bio.name = "flames_result.jpg"   
