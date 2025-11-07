@@ -4,9 +4,8 @@ from pyrogram import filters
 from pyrogram.types import Message
 from VIPMUSIC import app
 from config import BANNED_USERS, MENTION_USERNAMES, START_REACTIONS
-from VIPMUSIC.utils.database import get_sudoers
-from VIPMUSIC.utils.database import db
-
+from VIPMUSIC.utils.database import get_sudoers, add_sudo, remove_sudo
+from VIPMUSIC.misc import SUDOERS
 # =================== DATABASE COLLECTION ===================
 COLLECTION = db.reaction_mentions
 
@@ -45,7 +44,7 @@ async def is_admin_or_sudo(client, message: Message) -> bool:
 
 
 # =================== COMMAND: /addreac ===================
-@app.on_message(filters.command("addreac") & ~BANNED_USERS)
+@app.on_message(filters.command("addreact") & ~BANNED_USERS)
 async def add_reaction_name(client, message: Message):
     if not await is_admin_or_sudo(client, message):
         return await message.reply_text("⚠️ Only admins or sudo users can add reaction names.")
@@ -64,7 +63,7 @@ async def add_reaction_name(client, message: Message):
 
 
 # =================== COMMAND: /reaclist (Everyone) ===================
-@app.on_message(filters.command("reaclist") & ~BANNED_USERS)
+@app.on_message(filters.command("reactlist") & ~BANNED_USERS)
 async def list_reactions(client, message: Message):
     if not custom_mentions:
         return await message.reply_text("ℹ️ No mention triggers found.")
@@ -75,7 +74,7 @@ async def list_reactions(client, message: Message):
 
 
 # =================== COMMAND: /delreac ===================
-@app.on_message(filters.command("delreac") & ~BANNED_USERS)
+@app.on_message(filters.command("delreact") & ~BANNED_USERS)
 async def delete_reaction_name(client, message: Message):
     if not await is_admin_or_sudo(client, message):
         return await message.reply_text("⚠️ Only admins or sudo users can delete reaction names.")
@@ -94,7 +93,7 @@ async def delete_reaction_name(client, message: Message):
 
 
 # =================== COMMAND: /clearreac ===================
-@app.on_message(filters.command("clearreac") & ~BANNED_USERS)
+@app.on_message(filters.command("clearreact") & ~BANNED_USERS)
 async def clear_reactions(client, message: Message):
     if not await is_admin_or_sudo(client, message):
         return await message.reply_text("⚠️ Only admins or sudo users can clear reactions.")
