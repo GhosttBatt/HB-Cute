@@ -136,10 +136,10 @@ def make_poster(image_url, name1, name2, title, percentage):
 
     draw = ImageDraw.Draw(bg)
     try:
-        font_title = ImageFont.truetype("VIPMUSIC/assets/NotoSansSymbols-Regular.ttf", 60)
+        font_title = ImageFont.truetype("VIPMUSIC/assets/NotoSansMath-Regular.ttf", 60)
         font_text = ImageFont.truetype("VIPMUSIC/assets/DejaVuSans.ttf", 45)
         font_small = ImageFont.truetype("VIPMUSIC/assets/DejaVuSans.ttf", 35)
-        font_fancy = ImageFont.truetype("VIPMUSIC/assets/NotoSansSymbols-Regular.ttf", 35)
+        font_fancy = ImageFont.truetype("VIPMUSIC/assets/NotoSansMath-Regular.ttf", 35)
     except:
         font_title = font_text = font_small = font_fancy = ImageFont.load_default()
 
