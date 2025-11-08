@@ -244,6 +244,7 @@ async def flames_command(client, message):
         await message.reply_text(f"⚠️ Error: {e}")
 
 
+
 # --- /MATCH COMMAND ---
 @app.on_message(filters.command("match"))
 async def match_command(client, message):
@@ -266,7 +267,11 @@ async def match_command(client, message):
 
         selected = random.sample(members, 3)
 
-        text = f"<blockquote>🎯 **𝐓ᴏᴘ 3 𝐌ᴀᴛᴄʜᴇs 𝐅ᴏʀ\n[{user.first_name}](tg://user?id={user.id})** 💘</blockquote>\n"
+        text = (
+            f"<blockquote>🎯 **𝐓ᴏᴘ 3 𝐌ᴀᴛᴄʜᴇs 𝐅ᴏʀ\n"
+            f"[{user.first_name}](tg://user?id={user.id})** 💘</blockquote>\n"
+        )
+
         for idx, member in enumerate(selected, start=1):
             name = member.first_name or "Unknown"
             uid = member.id
@@ -275,20 +280,31 @@ async def match_command(client, message):
             result = RESULTS[result_letter]
             percent = random.randint(50, 100)
 
-            alert = "💞 **Perfect Couple Alert!** 💞" if percent >= 85 and result_letter in ["L", "S", "M"] else ""
+            alert = (
+                "💞 **Perfect Couple Alert!** 💞"
+                if percent >= 85 and result_letter in ["L", "S", "M"]
+                else ""
+            )
 
             text += (
-                f"<blockquote>{idx}. {tag} → {result['title']} ({percent}%)\n{emoji_bar(percent)}\n"
+                f"<blockquote>{idx}. {tag} → {result['title']} ({percent}%)\n"
+                f"{emoji_bar(percent)}\n"
                 f"📝 {result['desc']}\n{alert}</blockquote>\n"
             )
 
-        all_images = [img for res in RESULTS.values() for img in res["images"]]
+        # --- Choose random image safely ---
+        all_images = [
+            img for res in RESULTS.values() for img in res["images"] if img
+        ]
         image_url = random.choice(all_images)
+
+        # Convert local paths to absolute ones
+        if not image_url.startswith(("http://", "https://")):
+            image_url = os.path.abspath(image_url)
 
         await message.reply_photo(
             photo=image_url,
             caption=text,
-            #parse_mode="Markdown",
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("🔻 ᴛʀʏ ᴀɢᴀɪɴ 🔻", callback_data="match_retry")]
             ])
