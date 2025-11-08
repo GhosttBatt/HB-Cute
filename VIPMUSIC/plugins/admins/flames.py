@@ -170,11 +170,11 @@ def make_poster(image_url, name1, name2, title_cap, percentage):
             draw.text((x, y), text, fill=text_color, font=fnt)
 
         # --- Draw texts on poster ---
-        draw_centered_text(40, "F L A M E S", font_title)
-        draw_centered_text(530, f"{name1.title()} x {name2.title()}\n-----\n", font_small)
-        draw_centered_text(360, f"{title_cap}", font_text)
-        draw_centered_text(260, f"Compatibility: {percentage}%", font_text)
-        draw_centered_text(130, "Made By x @HeartBeat_Fam", font_fancy)
+        draw_centered_text(480, "F L A M E S", font_title)
+        draw_centered_text(450, f"{name1.title()} x {name2.title()}\n", font_small)
+        draw_centered_text(320, f"{title_cap}", font_text)
+        draw_centered_text(240, f"Compatibility: {percentage}%", font_text)
+        draw_centered_text(120, "Made By x @HeartBeat_Fam", font_fancy)
 
         # --- Output image ---
         bio = io.BytesIO()
