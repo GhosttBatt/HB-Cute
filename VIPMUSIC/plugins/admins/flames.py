@@ -89,9 +89,9 @@ def darken_image(image, opacity=0.6):
 
 # --- FANCY FONT ---
 def get_font(size):
-    font_path = "VIPMUSIC/assets/fonts/Lovely.otf"
+    font_path = "VIPMUSIC/assets/Sprintura Demo.otf"
     if not os.path.exists(font_path):
-        font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+        font_path = "VIPMUSIC/assets/Rekalgera-Regular.otf"
     return ImageFont.truetype(font_path, size)
 
 
@@ -116,7 +116,7 @@ def draw_result(image, title, desc, percent, name1=None, name2=None):
         draw.text((x, y), text, font=font, fill=fill)
 
     # --- Headings ---
-    flames_title = "🌸 F L A M E S 🌸"
+    flames_title = "-- F L A M E S --"
     tw = draw.textlength(flames_title, font=font_title)
     shadowed_text((W - tw) / 2, H * 0.10, flames_title, font_title)
 
@@ -127,12 +127,12 @@ def draw_result(image, title, desc, percent, name1=None, name2=None):
         shadowed_text((W - nw) / 2, H * 0.28, names_text, font_name)
 
     # --- Result heading ---
-    result_heading = f"💫 Result: {title}"
+    result_heading = f"Result: {title}"
     rw = draw.textlength(result_heading, font=font_sub)
     shadowed_text((W - rw) / 2, H * 0.43, result_heading, font_sub)
 
     # --- Compatibility heading ---
-    comp_heading = f"✨ Compatibility: {percent}%"
+    comp_heading = f"Compatibility: {percent}%"
     cw = draw.textlength(comp_heading, font=font_sub)
     shadowed_text((W - cw) / 2, H * 0.56, comp_heading, font_sub)
 
@@ -141,7 +141,7 @@ def draw_result(image, title, desc, percent, name1=None, name2=None):
     shadowed_text((W - dw) / 2, H * 0.68, desc, font_small)
 
     # --- Footer Signature ---
-    footer = "💫 Made With 💖 @HeartBeat_Fam"
+    footer = "Made by ❤ @HeartBeat_Fam"
     fw = draw.textlength(footer, font=font_bottom)
     shadowed_text((W - fw) / 2, H * 0.88, footer, font_bottom)
 
