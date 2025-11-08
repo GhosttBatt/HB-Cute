@@ -33,6 +33,9 @@ LOG_CHANNEL = int(getenv("LOG_CHANNEL", "-1001735663878")) #fed_logs
 OWNER_ID = int(getenv("OWNER_ID", 1281282633))
 SUDOERS = getenv("SUDOERS", "1281282633 8399160924 6773435708").split()
 
+#REACTION_BOT
+REACTION_BOT = getenv("REACTION_BOT", "True")
+
 ## Fill these variables if you're deploying on heroku.
 HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
 # Get it from http://dashboard.heroku.com/account
