@@ -2,11 +2,9 @@ import random
 import io
 import os
 import requests
-import aiohttp
-import asyncio
 from VIPMUSIC import app
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance, ImageStat
-from pyrogram import Client, filters
+from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.enums import ChatType
 
@@ -16,51 +14,51 @@ RESULTS = {
         "title": "💛 𝐅ʀɪᴇɴᴅ𝗌",
         "title_cap": "Friends",
         "desc": "A strong bond filled with laughter, trust, and memories. You two are perfect as friends forever! 🤝",
-        "image_url" : [ "" ],
-        "images": [f"VIPMUSIC/assets/flames/friends/f{random.randint(1,5)}.jpg"]
+        "image_url": [""],
+        "images": [f"VIPMUSIC/assets/flames/friends/{i}.jpg" for i in range(1, 6)]
     },
     "L": {
         "title": "❤️ 𝐋ᴏᴠᴇ",
         "title_cap": "Love",
         "desc": "There’s a spark and magic between you both — a true love story is forming! 💞",
-        "image_url" : [ 
+        "image_url": [
             "https://i.imgur.com/4eAOSDq.jpeg",
             "https://i.imgur.com/4eAOSDq.jpeg",
             "https://i.imgur.com/4eAOSDq.jpeg"
         ],
-        "images": [f"VIPMUSIC/assets/flames/love/l{random.randint(1,5)}.jpg"]
+        "images": [f"VIPMUSIC/assets/flames/love/{i}.jpg" for i in range(1, 6)]
     },
     "A": {
         "title": "💖 𝐀ғғᴇᴄᴛɪᴏɴ",
         "title_cap": "Affection",
         "desc": "You both care deeply for each other — gentle hearts and pure emotion bloom! 🌸",
-        "image_url" : [ 
+        "image_url": [
             "https://i.imgur.com/4eAOSDq.jpeg",
             "https://i.imgur.com/4eAOSDq.jpeg",
             "https://i.imgur.com/4eAOSDq.jpeg"
         ],
-        "images": [f"VIPMUSIC/assets/flames/affection/a{random.randint(1,5)}.jpg"]
+        "images": [f"VIPMUSIC/assets/flames/affection/{i}.jpg" for i in range(1, 6)]
     },
     "M": {
         "title": "💍 𝐌ᴀʀʀɪᴀɢᴇ",
         "title_cap": "Marriage",
         "desc": "Destiny has already written your names together — a wedding bell symphony awaits! 💫",
-        "image_url" : [ "" ],
-        "images": [f"VIPMUSIC/assets/flames/marriage/m{random.randint(1,5)}.jpg"]
+        "image_url": [""],
+        "images": [f"VIPMUSIC/assets/flames/marriage/{i}.jpg" for i in range(1, 6)]
     },
     "E": {
         "title": "💔 𝐄ɴᴇᴍʏ",
         "title_cap": "Enemy",
         "desc": "Clashing energies and fiery tempers — maybe not meant to be this time 😅",
-        "image_url" : [ "" ],
-        "images": [f"VIPMUSIC/assets/flames/enemy/e{random.randint(1,5)}.jpg"]
+        "image_url": [""],
+        "images": [f"VIPMUSIC/assets/flames/enemy/{i}.jpg" for i in range(1, 6)]
     },
     "S": {
-        "title": "💜 𝐒ɪʙʟɪɴɢ𝗌",
+        "title": "💜 𝐒ɪʙʟɪɴɢ𝗦",
         "title_cap": "Siblings",
-        "image_url" : [ "" ],
         "desc": "You both share a sibling-like connection — teasing, caring, and protective 💫",
-        "images": [f"VIPMUSIC/assets/flames/siblings/s{random.randint(1,5)}.jpg"]
+        "image_url": [""],
+        "images": [f"VIPMUSIC/assets/flames/siblings/{i}.jpg" for i in range(1, 6)]
     }
 }
 
@@ -98,13 +96,13 @@ def make_poster(image_url, name1, name2, title_cap, percentage):
             except Exception as e:
                 print(f"[FLAMES] URL image failed: {e}")
 
-        # --- If URL not valid, fallback to local folder images ---
+        # --- If URL invalid or failed, fallback to local folder ---
         if bg is None:
-            folder_name = title_cap.lower()
-            folder_path = f"VIPMUSIC/assets/flames/{folder_name}"
+            folder_path = f"VIPMUSIC/assets/flames/{title_cap.lower()}"
             if os.path.exists(folder_path):
                 local_images = [
-                    os.path.join(folder_path, f) for f in os.listdir(folder_path)
+                    os.path.join(folder_path, f)
+                    for f in os.listdir(folder_path)
                     if f.lower().endswith((".jpg", ".jpeg", ".png"))
                 ]
                 if local_images:
@@ -114,10 +112,10 @@ def make_poster(image_url, name1, name2, title_cap, percentage):
             if bg is None:
                 bg = Image.new("RGB", (900, 600), (255, 192, 203))
 
-        # --- Resize and blur background ---
-        bg = bg.resize((900, 600)).filter(ImageFilter.GaussianBlur(2))
+        # --- Resize and blur ---
+        bg = bg.resize((900, 600)).filter(ImageFilter.GaussianBlur(4))
 
-        # --- Add dark vignette shadow effect ---
+        # --- Dark vignette effect ---
         shadow = Image.new("L", bg.size, 0)
         draw_shadow = ImageDraw.Draw(shadow)
         max_dim = max(bg.size)
@@ -131,7 +129,7 @@ def make_poster(image_url, name1, name2, title_cap, percentage):
         shadow_mask = ImageEnhance.Brightness(shadow).enhance(0.8)
         bg.paste((0, 0, 0), mask=shadow_mask)
 
-        # --- Adjust brightness ---
+        # --- Brightness adjust ---
         stat = ImageStat.Stat(bg)
         brightness = sum(stat.mean[:3]) / 3
         if brightness > 160:
@@ -147,19 +145,17 @@ def make_poster(image_url, name1, name2, title_cap, percentage):
 
         # --- Load fonts ---
         try:
-            font_title = ImageFont.truetype("VIPMUSIC/assets/NotoSansMath-Regular.ttf", 60)
+            font_title = ImageFont.truetype("VIPMUSIC/assets/DejaVuSans-Bold.ttf", 60)
             font_text = ImageFont.truetype("VIPMUSIC/assets/Rekalgera-Regular.otf", 45)
             font_small = ImageFont.truetype("VIPMUSIC/assets/Sprintura Demo.otf", 35)
-            font_fancy = ImageFont.truetype("VIPMUSIC/assets/NotoSansMath-Regular.ttf", 35)
+            font_fancy = ImageFont.truetype("VIPMUSIC/assets/DejaVuSans.ttf", 35)
         except Exception as e:
             print(f"[FLAMES] Font load failed: {e}")
             font_title = font_text = font_small = font_fancy = ImageFont.load_default()
 
-        # --- Safe text ---
         def safe_text(text):
             return text.encode("ascii", "ignore").decode("ascii")
 
-        # --- Draw centered text with shadow glow ---
         def draw_centered_text(y, text, font=None, max_width=850):
             text = safe_text(str(text))
             fnt = font or ImageFont.load_default()
@@ -173,14 +169,14 @@ def make_poster(image_url, name1, name2, title_cap, percentage):
                 draw.text((x + ox, y + oy), text, font=fnt, fill=shadow_color)
             draw.text((x, y), text, fill=text_color, font=fnt)
 
-        # --- Draw poster texts ---
+        # --- Draw texts on poster ---
         draw_centered_text(40, "F L A M E S", font_title)
         draw_centered_text(170, f"{name1.title()} x {name2.title()}", font_text)
         draw_centered_text(270, f"Result: {title_cap}", font_text)
         draw_centered_text(360, f"Compatibility: {percentage}%", font_small)
-        draw_centered_text(530, "Made With x @HeartBeat_Fam", font_fancy)
+        draw_centered_text(530, "Made By x @HeartBeat_Fam", font_fancy)
 
-        # --- Save output ---
+        # --- Output image ---
         bio = io.BytesIO()
         bio.name = "flames_result.jpg"
         bg.save(bio, "JPEG")
@@ -192,7 +188,7 @@ def make_poster(image_url, name1, name2, title_cap, percentage):
         raise
 
 
-# --- EMOJI BAR FUNCTION ---
+# --- EMOJI BAR ---
 def emoji_bar(percent):
     full = int(percent / 20)
     return "✩" * full + "★" * (5 - full)
@@ -217,8 +213,9 @@ async def flames_command(client, message):
         communication = random.randint(50, 100)
         trust = random.randint(60, 100)
 
-        image_url = random.choice(result["images"])
-        poster = make_poster(image_url, name1, name2, result["title_cap"], love)
+        # --- Random image (URL or local) ---
+        image_source = random.choice(result["image_url"] + result["images"])
+        poster = make_poster(image_source, name1, name2, result["title_cap"], love)
 
         caption = (
             f"<blockquote>{result['title']}</blockquote>\n"
@@ -247,58 +244,7 @@ async def flames_command(client, message):
         await message.reply_text(f"⚠️ Error: {e}")
 
 
-# --- /MATCH COMMAND ---
-@app.on_message(filters.command("match"))
-async def match_command(client, message):
-    try:
-        if message.chat.type not in (ChatType.SUPERGROUP, ChatType.GROUP, "supergroup", "group"):
-            await message.reply_text("❌ This command only works in groups!", quote=True)
-            return
-
-        user = message.from_user
-        members = []
-        async for member in client.get_chat_members(message.chat.id):
-            if not member.user.is_bot and member.user.id != user.id:
-                members.append(member.user)
-            if len(members) >= 50:
-                break
-
-        if len(members) < 3:
-            await message.reply_text("⚠️ Not enough members in this group to match!", quote=True)
-            return
-
-        selected = random.sample(members, 3)
-        text = f"<blockquote>🎯 **𝐓ᴏᴘ 3 𝐌ᴀᴛᴄʜᴇs 𝐅ᴏʀ\n[{user.first_name}](tg://user?id={user.id})** 💘</blockquote>\n"
-
-        for idx, member in enumerate(selected, start=1):
-            name = member.first_name or "Unknown"
-            uid = member.id
-            tag = f"[{name}](tg://user?id={uid})"
-            result_letter = random.choice(list(RESULTS.keys()))
-            result = RESULTS[result_letter]
-            percent = random.randint(50, 100)
-            alert = "💞 **Perfect Couple Alert!** 💞" if percent >= 85 and result_letter in ["L", "S", "M"] else ""
-            text += (
-                f"<blockquote>{idx}. {tag} → {result['title']} ({percent}%)\n{emoji_bar(percent)}\n"
-                f"📝 {result['desc']}\n{alert}</blockquote>\n"
-            )
-
-        all_images = [img for res in RESULTS.values() for img in res["images"]]
-        image_url = random.choice(all_images)
-
-        await message.reply_photo(
-            photo=image_url,
-            caption=text,
-            reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("🔻 ᴛʀʏ ᴀɢᴀɪɴ 🔻", callback_data="match_retry")]
-            ])
-        )
-
-    except Exception as e:
-        await message.reply_text(f"⚠️ Error: {e}")
-
-
-# --- CALLBACK HANDLERS ---
+# --- CALLBACKS ---
 @app.on_callback_query()
 async def callback_handler(client, cq):
     try:
@@ -315,8 +261,6 @@ async def callback_handler(client, cq):
                 "💜 S - Sibling\n",
                 quote=True
             )
-        elif cq.data == "match_retry":
-            await cq.message.reply_text("🎯 Type `/match` again to get new random matches!")
         await cq.answer()
     except Exception as e:
         await cq.message.reply_text(f"⚠️ Callback Error: {e}")
