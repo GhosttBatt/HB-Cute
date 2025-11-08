@@ -11,14 +11,14 @@ from pyrogram.enums import ChatType
 # --- FLAMES RESULT CONFIG ---
 RESULTS = {
     "F": {
-        "title": "💛 𝐅ʀɪᴇɴᴅ𝗌",
+        "title": "          💛 𝐅ʀɪᴇɴᴅ𝗌",
         "title_cap": "Friends",
         "desc": "A strong bond filled with laughter, trust, and memories. You two are perfect as friends forever! 🤝",
         "image_url": [""],
         "images": [f"VIPMUSIC/assets/flames/friends/{i}.jpg" for i in range(1, 6)]
     },
     "L": {
-        "title": "❤️ 𝐋ᴏᴠᴇ",
+        "title": "            ❤️ 𝐋ᴏᴠᴇ",
         "title_cap": "Love",
         "desc": "There’s a spark and magic between you both — a true love story is forming! 💞",
         "image_url": [
@@ -29,7 +29,7 @@ RESULTS = {
         "images": [f"VIPMUSIC/assets/flames/love/{i}.jpg" for i in range(1, 6)]
     },
     "A": {
-        "title": "💖 𝐀ғғᴇᴄᴛɪᴏɴ",
+        "title": "          💖 𝐀ғғᴇᴄᴛɪᴏɴ",
         "title_cap": "Affection",
         "desc": "You both care deeply for each other — gentle hearts and pure emotion bloom! 🌸",
         "image_url": [
@@ -40,21 +40,21 @@ RESULTS = {
         "images": [f"VIPMUSIC/assets/flames/affection/{i}.jpg" for i in range(1, 6)]
     },
     "M": {
-        "title": "💍 𝐌ᴀʀʀɪᴀɢᴇ",
+        "title": "          💍 𝐌ᴀʀʀɪᴀɢᴇ",
         "title_cap": "Marriage",
         "desc": "Destiny has already written your names together — a wedding bell symphony awaits! 💫",
         "image_url": [""],
         "images": [f"VIPMUSIC/assets/flames/marriage/{i}.jpg" for i in range(1, 6)]
     },
     "E": {
-        "title": "💔 𝐄ɴᴇᴍʏ",
+        "title": "           💔 𝐄ɴᴇᴍʏ",
         "title_cap": "Enemy",
         "desc": "Clashing energies and fiery tempers — maybe not meant to be this time 😅",
         "image_url": [""],
         "images": [f"VIPMUSIC/assets/flames/enemy/{i}.jpg" for i in range(1, 6)]
     },
     "S": {
-        "title": "💜 𝐒ɪʙʟɪɴɢ𝗦",
+        "title": "          💜 𝐒ɪʙʟɪɴɢ𝗌",
         "title_cap": "Siblings",
         "desc": "You both share a sibling-like connection — teasing, caring, and protective 💫",
         "image_url": [""],
@@ -115,6 +115,7 @@ def make_poster(image_url, name1, name2, title_cap, percentage):
         # --- Resize and blur ---
         bg = bg.resize((900, 600)).filter(ImageFilter.GaussianBlur(4))
 
+"""
         # --- Dark vignette effect ---
         shadow = Image.new("L", bg.size, 0)
         draw_shadow = ImageDraw.Draw(shadow)
@@ -128,7 +129,7 @@ def make_poster(image_url, name1, name2, title_cap, percentage):
         shadow = shadow.filter(ImageFilter.GaussianBlur(100))
         shadow_mask = ImageEnhance.Brightness(shadow).enhance(0.8)
         bg.paste((0, 0, 0), mask=shadow_mask)
-
+"""
         # --- Brightness adjust ---
         stat = ImageStat.Stat(bg)
         brightness = sum(stat.mean[:3]) / 3
@@ -219,22 +220,22 @@ async def flames_command(client, message):
 
         caption = (
             f"<blockquote>{result['title']}</blockquote>\n"
-            f"<blockquote>💥 **{name1.title()} ❣️ {name2.title()}**\n"
-            f"💞 𝐂ᴏᴍᴘᴀᴛɪʙɪʟɪᴛʏ: **{love}%**\n{emoji_bar(love)}\n"
-            f"💓 𝐄ᴍᴏᴛɪᴏɴᴀʟ𝐁ᴏɴᴅ: **{emotion}%**\n{emoji_bar(emotion)}\n"
-            f"🤞🏻 𝐅ᴜɴ𝐋ᴇᴠᴇʟ: **{fun}%**\n{emoji_bar(fun)}\n"
-            f"✨ 𝐂ᴏᴍᴍᴜɴɪᴄᴀᴛɪᴏɴ: **{communication}%**\n{emoji_bar(communication)}\n"
-            f"💯 𝐓ʀᴜsᴛ: **{trust}%**\n{emoji_bar(trust)}</blockquote>\n"
+            f"<blockquote>✧══════•❁♡︎❁•══════✧\n• | **{name1.title()} ❣️ • | {name2.title()}**\n✧══════•❁♡︎❁•══════✧\n</blockquote>"
+            f"<blockquote>💞 𝐂ᴏᴍᴘᴀᴛɪʙɪʟɪᴛʏ: **{love}%**\n       {emoji_bar(love)}\n"
+            f"💓 𝐄ᴍᴏᴛɪᴏɴᴀʟ𝐁ᴏɴᴅ: **{emotion}%**\n       {emoji_bar(emotion)}\n"
+            f"🤞🏻 𝐅ᴜɴ𝐋ᴇᴠᴇʟ: **{fun}%**\n       {emoji_bar(fun)}\n"
+            f"✨ 𝐂ᴏᴍᴍᴜɴɪᴄᴀᴛɪᴏɴ: **{communication}%**\n       {emoji_bar(communication)}\n"
+            f"💯 𝐓ʀᴜsᴛ: **{trust}%**\n       {emoji_bar(trust)}</blockquote>\n"
             f"<blockquote>🔥 {result['desc']}</blockquote>"
         )
 
         buttons = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton("🔻 ᴛʀʏ ᴀɢᴀɪɴ 🔻", callback_data="flames_retry"),
-                InlineKeyboardButton("🔻 sʜᴀʀᴇ ʀᴇsᴜʟᴛ 🔻", switch_inline_query="flames love test"),
-            ],
-            [
-                InlineKeyboardButton("🔻 ᴠɪᴇᴡ ᴀʟʟ ʀᴇsᴜʟᴛs 🔻", callback_data="flames_list")
+                #InlineKeyboardButton("🔻 ᴛʀʏ ᴀɢᴀɪɴ 🔻", callback_data="flames_retry"),
+                InlineKeyboardButton("🔻 sʜᴀʀᴇ 🔻", switch_inline_query="flames love test"),
+            #],
+            #[
+                InlineKeyboardButton("🔻 ᴠɪᴇᴡ ᴀʟʟ 🔻", callback_data="flames_list")
             ]
         ])
 
