@@ -35,31 +35,48 @@ async def get_admins(client, chat_id: int):
     if chat_id in admin_cache and (now - admin_cache[chat_id]["time"]) < 600:
         return admin_cache[chat_id]["admins"]
 
+    admins = set()
     try:
-        admins = set()
         async for member in client.get_chat_members(chat_id, filter="administrators"):
             admins.add(member.user.id)
         admin_cache[chat_id] = {"admins": admins, "time": now}
-        return admins
     except Exception as e:
         print(f"[AdminCache] Error: {e}")
-        return set()
+    return admins
 
 
 # =================== PERMISSION CHECK ===================
 async def is_admin_or_sudo(client, message: Message) -> bool:
     """Check if user is admin, owner, or sudo."""
     user_id = message.from_user.id
+    chat_id = message.chat.id
     sudoers = await get_sudoers()
 
+    # Owner or sudo
     if user_id == OWNER_ID or user_id in sudoers:
         return True
 
+    # Private chat check
     if message.chat.type not in ["group", "supergroup"]:
         return False
 
-    admins = await get_admins(client, message.chat.id)
-    return user_id in admins
+    # Check admin cache first
+    admins = await get_admins(client, chat_id)
+    if user_id in admins:
+        return True
+
+    # Fallback — direct Telegram API call
+    try:
+        member = await client.get_chat_member(chat_id, user_id)
+        if member.status in (ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR):
+            # Cache update (avoid future misses)
+            admins.add(user_id)
+            admin_cache[chat_id] = {"admins": admins, "time": time.time()}
+            return True
+    except Exception as e:
+        print(f"[AdminCheckFallback] Error: {e}")
+
+    return False
 
 
 # =================== COMMAND: /addreact ===================
