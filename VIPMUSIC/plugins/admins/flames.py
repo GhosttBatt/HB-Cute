@@ -81,7 +81,7 @@ def darken_image(image, opacity=0.6):
 def get_font_flames(size):
     # Fonts used for the "F L A M E S" header
     paths = [
-        "VIPMUSIC/assets/fonts/Blanka-Regular.otf",    # example fancy font for F L A M E S
+        "VIPMUSIC/assets/fonts/DejaVuSans-Bold.ttf",    # example fancy font for F L A M E S
         "VIPMUSIC/assets/Sprintura Demo.otf",
     ]
     for p in paths:
@@ -92,8 +92,8 @@ def get_font_flames(size):
 def get_font_title(size):
     # Fonts used for the result title (Love, Friends, etc.)
     paths = [
-        "VIPMUSIC/assets/fonts/Heavitas.ttf",          # bold elegant font for Title
-        "VIPMUSIC/assets/Rekalgera-Regular.otf",
+        "VIPMUSIC/assets/fonts/DejaVuSans-Bold.ttf",          # bold elegant font for Title
+        "VIPMUSIC/assets/Sprintura Demo.otf",
     ]
     for p in paths:
         if os.path.exists(p):
@@ -103,8 +103,8 @@ def get_font_title(size):
 def get_font_compat(size):
     # Fonts used for the Compatibility line
     paths = [
-        "VIPMUSIC/assets/fonts/Helvetica-Bold.ttf",    # clean readable font for Compatibility
-        "VIPMUSIC/assets/fonts/Montserrat-SemiBold.ttf",
+        "VIPMUSIC/assets/fonts/DejaVuSans-Bold.ttf",    # clean readable font for Compatibility
+        "VIPMUSIC/assets/fonts/Rekalgera-Regular.otf",
     ]
     for p in paths:
         if os.path.exists(p):
@@ -115,7 +115,7 @@ def get_font(size):
     # fallback / general font
     for f in [
         "VIPMUSIC/assets/fonts/Rekalgera-Regular.otf",
-        "VIPMUSIC/assets/fonts/Helvetica-Bold.ttf",
+        "VIPMUSIC/assets/fonts/DejaVuSans-Bold.ttf",
     ]:
         if os.path.exists(f):
             return ImageFont.truetype(f, size)
