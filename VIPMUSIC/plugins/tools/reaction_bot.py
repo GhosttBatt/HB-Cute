@@ -1,106 +1,229 @@
+# VIPMUSIC/plugins/tools/reaction_bot.py
+import os
+import importlib
+import importlib.util
 import asyncio
-from pyrogram import filters
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from VIPMUSIC import app
-from config import REACTION_BOT, BANNED_USERS, OWNER_ID, START_REACTIONS
-from VIPMUSIC.utils.database import get_sudoers
-from VIPMUSIC.utils.database.reactiondb import get_reaction_status, set_reaction_status
+import random
+from typing import Set, Dict, Optional, Tuple
 
-# ------------------------------
-# 🔘 BUTTONS
-# ------------------------------
+from pyrogram import filters
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
+from pyrogram.types import CallbackQuery
+from pyrogram.enums import ChatMemberStatus
+
+# Prefer importing app and config as your project expects
+# (adjust if your project exposes these differently)
+try:
+    from VIPMUSIC import app  # should be your bot client
+except Exception:
+    raise RuntimeError("Failed to import app from VIPMUSIC; ensure VIPMUSIC/__init__.py exposes 'app'.")
+
+# import config values (must exist in your config)
+try:
+    from config import REACTION_BOT, START_REACTIONS, OWNER_ID, BANNED_USERS
+except Exception:
+    # fallback defaults if config missing keys
+    REACTION_BOT = True
+    START_REACTIONS = []
+    OWNER_ID = None
+    try:
+        from config import BANNED_USERS as BANNED_USERS
+    except Exception:
+        BANNED_USERS = filters.user([])
+
+# Try to import get_sudoers from your DB utils; fallback to empty function
+try:
+    from VIPMUSIC.utils.database import get_sudoers  # if this is a function
+except Exception:
+    async def get_sudoers():
+        return set()
+
+# Try to import reactiondb via normal package; if that fails, load by path
+def import_reactiondb():
+    # First try normal import
+    try:
+        from VIPMUSIC.utils.database.reactiondb import get_reaction_status, set_reaction_status
+        return get_reaction_status, set_reaction_status
+    except Exception:
+        # fallback: construct file path relative to repo root
+        fallback_path = os.path.join(os.getcwd(), "VIPMUSIC", "utils", "database", "reactiondb.py")
+        if os.path.exists(fallback_path):
+            spec = importlib.util.spec_from_file_location("reactiondb_fallback", fallback_path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)  # type: ignore
+            return getattr(mod, "get_reaction_status"), getattr(mod, "set_reaction_status")
+        else:
+            # final fallback: memory-only stub
+            print("[ReactionBot] reactiondb not found; using memory-only stub.")
+            _mem = {}
+            async def get_reaction_status_stub(cid: int) -> bool:
+                return _mem.get(str(cid), False)
+            async def set_reaction_status_stub(cid: int, status: bool):
+                _mem[str(cid)] = bool(status)
+                print(f"[ReactionDB-stub] Chat {cid} set to {'ON' if status else 'OFF'}")
+            return get_reaction_status_stub, set_reaction_status_stub
+
+get_reaction_status, set_reaction_status = import_reactiondb()
+
+# -------------------- EMOJI CONFIG --------------------
+VALID_REACTIONS = [
+    "❤️","💖","💘","💞","💓","✨","🔥","💫",
+    "💥","🌸","😍","🥰","💎","🌙","🌹","😂",
+    "😎","🤩","😘","😉","🤭","💐","😻","🥳"
+]
+SAFE_REACTIONS = [e for e in (START_REACTIONS or []) if e in VALID_REACTIONS] or VALID_REACTIONS.copy()
+
+# per-chat rotation memory
+chat_used_reactions: Dict[int, Set[str]] = {}
+
+def next_emoji_local(chat_id: int) -> str:
+    if chat_id not in chat_used_reactions:
+        chat_used_reactions[chat_id] = set()
+    used = chat_used_reactions[chat_id]
+    if len(used) >= len(SAFE_REACTIONS):
+        used.clear()
+    remaining = [e for e in SAFE_REACTIONS if e not in used]
+    emoji = random.choice(remaining)
+    used.add(emoji)
+    return emoji
+
+# -------------------- HELPERS --------------------
+async def is_admin_or_sudo(client, message: Message) -> Tuple[bool, Optional[str]]:
+    user = getattr(message, "from_user", None)
+    if not user:
+        return False, "no from_user"
+    user_id = getattr(user, "id", None)
+    chat = message.chat
+    chat_type = getattr(chat, "type", "").lower()
+    # owner / sudo quick checks
+    if OWNER_ID and user_id == OWNER_ID:
+        return True, None
+    try:
+        sudoers = await get_sudoers()
+        if user_id in sudoers:
+            return True, None
+    except Exception:
+        pass
+    # ensure group/supergroup
+    if chat_type not in ("group", "supergroup"):
+        return False, f"chat_type={chat_type}"
+    try:
+        member = await client.get_chat_member(chat.id, user_id)
+        if member.status in (ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR):
+            return True, None
+        return False, f"user_status={member.status}"
+    except Exception as e:
+        return False, str(e)
+
+# -------------------- BUTTONS --------------------
 def reaction_buttons(chat_id: int):
     return InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("✅ Enable", callback_data=f"reactionon_{chat_id}"),
-                InlineKeyboardButton("🚫 Disable", callback_data=f"reactionoff_{chat_id}"),
+                InlineKeyboardButton("✅ Enable", callback_data=f"reactionon:{chat_id}"),
+                InlineKeyboardButton("🚫 Disable", callback_data=f"reactionoff:{chat_id}"),
             ]
         ]
     )
 
-# ------------------------------
-# ⚙️ /reaction command
-# ------------------------------
-@app.on_message(filters.command("reaction") & ~BANNED_USERS)
-async def reaction_toggle(client, message):
-    if message.chat.type not in ["group", "supergroup"]:
-        return await message.reply_text("❌ This command can only be used in groups.")
+# -------------------- /reaction COMMAND --------------------
+@app.on_message(filters.command("reaction") & ~BANNED_USERS & (filters.group | filters.channel))
+async def reaction_command(client, message: Message):
+    # Only groups/supergroups allowed
+    chat = message.chat
+    if getattr(chat, "type", "").lower() not in ("group", "supergroup"):
+        return await message.reply_text("❌ This command works only in groups/supergroups.", quote=True)
 
-    try:
-        sudoers = await get_sudoers()
-    except Exception:
-        sudoers = []
+    ok, debug = await is_admin_or_sudo(client, message)
+    if not ok:
+        return await message.reply_text(f"⚠️ Only admins/owner/sudoers. Debug: {debug or 'none'}", quote=True)
 
-    user_id = message.from_user.id if message.from_user else 0
-    if user_id != OWNER_ID and user_id not in sudoers:
-        return await message.reply_text("🚫 Only admins or sudo users can manage reactions.")
-
-    chat_id = message.chat.id
-    current_status = await get_reaction_status(chat_id)
-
-    # No arguments → show buttons
+    # show status if no args
     if len(message.command) == 1:
-        status_text = "🟢 Enabled" if current_status else "🔴 Disabled"
-        return await message.reply_text(
-            f"**Reaction Bot is currently {status_text} for this chat.**\n\nUse the buttons below to toggle:",
-            reply_markup=reaction_buttons(chat_id),
-        )
+        status = await get_reaction_status(chat.id)
+        status_text = "✅ Enabled" if status else "❌ Disabled"
+        return await message.reply_text(f"🤖 Reaction Bot is **{status_text}** in this chat.", 
+                                        reply_markup=reaction_buttons(chat.id), quote=True)
 
-    arg = message.command[1].lower()
-    if arg == "on":
-        await set_reaction_status(chat_id, True)
-        return await message.reply_text("✅ Reaction Bot has been **enabled** for this chat.")
-    elif arg == "off":
-        await set_reaction_status(chat_id, False)
-        return await message.reply_text("🚫 Reaction Bot has been **disabled** for this chat.")
+    # /reaction on|off
+    action = message.command[1].lower()
+    if action == "on":
+        await set_reaction_status(chat.id, True)
+        await message.reply_text("✅ Reaction Bot enabled for this chat.", quote=True)
+    elif action == "off":
+        await set_reaction_status(chat.id, False)
+        await message.reply_text("💤 Reaction Bot disabled for this chat.", quote=True)
     else:
-        return await message.reply_text("Usage:\n`/reaction on` or `/reaction off`")
+        await message.reply_text("Usage: /reaction on or /reaction off", quote=True)
 
-# ------------------------------
-# 🔘 BUTTON CALLBACKS
-# ------------------------------
-@app.on_callback_query(filters.regex(r"^reactionon_(\d+)$"))
-async def cb_enable_reaction(client, query):
-    chat_id = int(query.data.split("_")[1])
+# -------------------- CALLBACK HANDLERS --------------------
+@app.on_callback_query(filters.regex(r"^reactionon:(-?\d+)$"))
+async def cb_reaction_on(client, callback: CallbackQuery):
+    data = callback.data or ""
+    parts = data.split(":")
+    if len(parts) != 2:
+        return await callback.answer("Invalid data", show_alert=True)
+    chat_id = int(parts[1])
+    # permission check using callback.message as context
+    ok, debug = await is_admin_or_sudo(client, callback.message)
+    if not ok:
+        return await callback.answer("Only admins/owner/sudoers can toggle.", show_alert=True)
     await set_reaction_status(chat_id, True)
-    await query.message.edit_text(
-        "✅ Reaction Bot **enabled** for this chat.",
-        reply_markup=reaction_buttons(chat_id),
-    )
+    try:
+        await callback.message.edit_text("✅ Reaction Bot enabled for this chat.", reply_markup=reaction_buttons(chat_id))
+    except Exception:
+        pass
+    await callback.answer("Enabled")
 
-@app.on_callback_query(filters.regex(r"^reactionoff_(\d+)$"))
-async def cb_disable_reaction(client, query):
-    chat_id = int(query.data.split("_")[1])
+@app.on_callback_query(filters.regex(r"^reactionoff:(-?\d+)$"))
+async def cb_reaction_off(client, callback: CallbackQuery):
+    data = callback.data or ""
+    parts = data.split(":")
+    if len(parts) != 2:
+        return await callback.answer("Invalid data", show_alert=True)
+    chat_id = int(parts[1])
+    ok, debug = await is_admin_or_sudo(client, callback.message)
+    if not ok:
+        return await callback.answer("Only admins/owner/sudoers can toggle.", show_alert=True)
     await set_reaction_status(chat_id, False)
-    await query.message.edit_text(
-        "🚫 Reaction Bot **disabled** for this chat.",
-        reply_markup=reaction_buttons(chat_id),
-    )
+    try:
+        await callback.message.edit_text("💤 Reaction Bot disabled for this chat.", reply_markup=reaction_buttons(chat_id))
+    except Exception:
+        pass
+    await callback.answer("Disabled")
 
-# ------------------------------
-# 💫 AUTO REACTOR
-# ------------------------------
-@app.on_message(filters.all & ~BANNED_USERS)
-async def auto_reactor(client, message):
+# -------------------- AUTO-REACT HANDLER --------------------
+@app.on_message((filters.text | filters.sticker | filters.photo | filters.video | filters.document) & ~BANNED_USERS & (filters.group | filters.channel))
+async def auto_react(client, message: Message):
+    # global config toggle
     if not REACTION_BOT:
-        return  # globally off
-
-    if message.chat.type not in ["group", "supergroup", "private"]:
+        return
+    # only groups/supergroups
+    chat_type = getattr(message.chat, "type", "").lower()
+    if chat_type not in ("group", "supergroup"):
+        return
+    # skip commands
+    if message.text and message.text.startswith("/"):
+        return
+    # skip bots
+    if getattr(message.from_user, "is_bot", False):
         return
 
     chat_id = message.chat.id
-    status = await get_reaction_status(chat_id)
-    if not status:
-        return
-
-    if not message.from_user or message.from_user.is_self:
+    try:
+        enabled = await get_reaction_status(chat_id)
+    except Exception:
+        enabled = False
+    if not enabled:
         return
 
     try:
-        from VIPMUSIC.plugins.tools.reaction import next_emoji
-        emoji = next_emoji(chat_id)
+        emoji = next_emoji_local(chat_id)
         await message.react(emoji)
         print(f"[ReactionBot] Reacted in {chat_id} with {emoji}")
     except Exception as e:
-        print(f"[ReactionBot] Failed to react in {chat_id}: {e}")
+        # fallback single heart attempt
+        try:
+            await message.react("❤️")
+        except Exception:
+            print(f"[ReactionBot] Failed to react in {chat_id}: {e}")
