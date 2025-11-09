@@ -69,7 +69,7 @@ async def is_admin_or_sudo(client, message: Message):
 
 
 # --- reaction control commands ---
-@app.on_message(filters.command(["reactionon"], prefixes=["/", "!", "."]) & filters.chat_type.groups)
+@app.on_message(filters.command(["reactionon"], prefixes=["/", "!", "."]) & filters.group)
 async def cmd_reaction_on(client, message: Message):
     print(f"[Command Trigger] /reactionon triggered in chat {message.chat.id}")
     try:
@@ -82,7 +82,7 @@ async def cmd_reaction_on(client, message: Message):
         traceback.print_exc()
 
 
-@app.on_message(filters.command(["reactionoff"], prefixes=["/", "!", "."]) & filters.chat_type.groups)
+@app.on_message(filters.command(["reactionoff"], prefixes=["/", "!", "."]) & filters.group)
 async def cmd_reaction_off(client, message: Message):
     print(f"[Command Trigger] /reactionoff triggered in chat {message.chat.id}")
     try:
@@ -95,7 +95,7 @@ async def cmd_reaction_off(client, message: Message):
         traceback.print_exc()
 
 
-@app.on_message(filters.command(["reaction"], prefixes=["/", "!", "."]) & filters.chat_type.groups)
+@app.on_message(filters.command(["reaction"], prefixes=["/", "!", "."]) & filters.group)
 async def cmd_reaction_menu(client, message: Message):
     print(f"[Command Trigger] /reaction menu triggered in chat {message.chat.id}")
     try:
@@ -130,7 +130,7 @@ async def reaction_callback(client, cq):
 
 
 # --- auto reaction ---
-@app.on_message(filters.chat_type.groups & ~BANNED_USERS)
+@app.on_message(filters.group & ~BANNED_USERS)
 async def auto_react_messages(client, message: Message):
     try:
         if not REACTION_BOT:
