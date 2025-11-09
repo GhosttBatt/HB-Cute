@@ -1,36 +1,32 @@
-# VIPMUSIC/utils/databases/reactiondb.py
+from VIPMUSIC.core.mongo import mongodb
 
-import json
-import os
-from typing import Dict
+reaction_statusdb = mongodb.reactionstatus
 
-REACTION_FILE = os.path.join(os.path.dirname(__file__), "reaction_status.json")
-
-# Ensure file exists
-if not os.path.exists(REACTION_FILE):
-    with open(REACTION_FILE, "w") as f:
-        json.dump({}, f)
+# Cache in memory
+reaction_enabled = {}
 
 
-def load_reaction_data() -> Dict[str, bool]:
-    try:
-        with open(REACTION_FILE, "r") as f:
-            return json.load(f)
-    except Exception:
-        return {}
+async def is_reaction_on(chat_id: int) -> bool:
+    mode = reaction_enabled.get(chat_id)
+    if mode is None:
+        user = await reaction_statusdb.find_one({"chat_id": chat_id})
+        if not user:
+            reaction_enabled[chat_id] = True
+            return True
+        reaction_enabled[chat_id] = False
+        return False
+    return mode
 
 
-def save_reaction_data(data: Dict[str, bool]):
-    with open(REACTION_FILE, "w") as f:
-        json.dump(data, f, indent=4)
+async def reaction_on(chat_id: int):
+    reaction_enabled[chat_id] = True
+    user = await reaction_statusdb.find_one({"chat_id": chat_id})
+    if user:
+        await reaction_statusdb.delete_one({"chat_id": chat_id})
 
 
-def get_reaction_status(chat_id: int) -> bool:
-    data = load_reaction_data()
-    return str(chat_id) in data and data[str(chat_id)]
-
-
-def set_reaction_status(chat_id: int, status: bool):
-    data = load_reaction_data()
-    data[str(chat_id)] = status
-    save_reaction_data(data)
+async def reaction_off(chat_id: int):
+    reaction_enabled[chat_id] = False
+    user = await reaction_statusdb.find_one({"chat_id": chat_id})
+    if not user:
+        await reaction_statusdb.insert_one({"chat_id": chat_id})
