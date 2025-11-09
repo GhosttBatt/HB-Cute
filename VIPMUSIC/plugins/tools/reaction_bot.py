@@ -8,11 +8,20 @@ from config import BANNED_USERS, OWNER_ID, START_REACTIONS, REACTION_BOT
 from VIPMUSIC.utils.databases import get_reaction_status, set_reaction_status
 from VIPMUSIC.utils.databases import load_reaction_data
 
+# Optional: import sudo list if available
+try:
+    from VIPMUSIC.utils.database import get_sudoers
+except ImportError:
+    async def get_sudoers():
+        return []
+
+
 # Maintain separate emoji rotation per chat
 chat_emoji_cycle = {}
 
-# Helper to get next emoji without repeating recently used ones
+
 def get_next_emoji(chat_id: int) -> str:
+    """Get next emoji for this chat (non-repeating)."""
     global chat_emoji_cycle
     if chat_id not in chat_emoji_cycle or not chat_emoji_cycle[chat_id]:
         emojis = START_REACTIONS.copy()
@@ -21,7 +30,7 @@ def get_next_emoji(chat_id: int) -> str:
     return chat_emoji_cycle[chat_id].pop()
 
 
-# ✅ Command to toggle reactions ON/OFF
+# ✅ COMMAND: /reaction (menu)
 @app.on_message(filters.command("reaction") & filters.group & ~BANNED_USERS)
 async def reaction_toggle(client, message: Message):
     chat_id = message.chat.id
@@ -30,7 +39,7 @@ async def reaction_toggle(client, message: Message):
     if not user:
         return await message.reply_text("Unknown user.")
 
-    # Only admins, owner, or sudoers can toggle
+    # Check admin or sudo
     member = await app.get_chat_member(chat_id, user.id)
     if not (
         member.status in ("administrator", "creator")
@@ -39,7 +48,7 @@ async def reaction_toggle(client, message: Message):
     ):
         return await message.reply_text("You must be an admin or sudo user to toggle reactions.")
 
-    # Prepare buttons
+    # Inline buttons
     keyboard = InlineKeyboardMarkup(
         [
             [
@@ -54,7 +63,47 @@ async def reaction_toggle(client, message: Message):
     await message.reply_text(text, reply_markup=keyboard)
 
 
-# ✅ Handle button presses
+# ✅ COMMAND: /reactionon
+@app.on_message(filters.command("reactionon") & filters.group & ~BANNED_USERS)
+async def enable_reactions(client, message: Message):
+    chat_id = message.chat.id
+    user = message.from_user
+    if not user:
+        return
+
+    member = await app.get_chat_member(chat_id, user.id)
+    if not (
+        member.status in ("administrator", "creator")
+        or user.id == OWNER_ID
+        or user.id in await get_sudoers()
+    ):
+        return await message.reply_text("Admins or sudo users only!")
+
+    set_reaction_status(chat_id, True)
+    await message.reply_text("✅ **Reactions enabled** in this chat.")
+
+
+# ✅ COMMAND: /reactionoff
+@app.on_message(filters.command("reactionoff") & filters.group & ~BANNED_USERS)
+async def disable_reactions(client, message: Message):
+    chat_id = message.chat.id
+    user = message.from_user
+    if not user:
+        return
+
+    member = await app.get_chat_member(chat_id, user.id)
+    if not (
+        member.status in ("administrator", "creator")
+        or user.id == OWNER_ID
+        or user.id in await get_sudoers()
+    ):
+        return await message.reply_text("Admins or sudo users only!")
+
+    set_reaction_status(chat_id, False)
+    await message.reply_text("❌ **Reactions disabled** in this chat.")
+
+
+# ✅ Handle inline button presses
 @app.on_callback_query(filters.regex("^reaction_(enable|disable):"))
 async def reaction_button(client, query):
     user = query.from_user
@@ -77,11 +126,11 @@ async def reaction_button(client, query):
         await query.message.edit_text("❌ Reactions have been **disabled** in this chat.")
 
 
-# ✅ Auto React if enabled
+# ✅ Auto React on each message
 @app.on_message(filters.text & filters.group & ~BANNED_USERS)
 async def auto_react(client, message: Message):
     if not REACTION_BOT:
-        return  # global disable in config
+        return  # globally disabled
 
     chat_id = message.chat.id
     if not get_reaction_status(chat_id):
