@@ -6,6 +6,8 @@ import csv
 from pyrogram import Client, filters
 from VIPMUSIC import app
 
+print("[hackmember] hackmember")
+
 @app.on_message(filters.command("hackmember") & filters.user(SUDOERS))  # & admin_filter)
 def user_command(client, message):
     
