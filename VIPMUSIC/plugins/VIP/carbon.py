@@ -3,7 +3,7 @@ from io import BytesIO
 from VIPMUSIC import app
 from pyrogram import filters
 
-
+print("[carboon] carbon")
 
 async def make_carbon(code):
     url = "https://carbonara.solopov.dev/api/cook"
