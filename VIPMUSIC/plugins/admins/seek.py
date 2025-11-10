@@ -8,6 +8,7 @@ from VIPMUSIC.utils import AdminRightsCheck, seconds_to_min
 from VIPMUSIC.utils.inline import close_markup
 from config import BANNED_USERS
 
+print("[seek] cseek")
 
 @app.on_message(
     filters.command(["seek", "cseek", "seekback", "cseekback"])
