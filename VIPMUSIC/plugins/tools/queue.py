@@ -14,6 +14,8 @@ from VIPMUSIC.utils.decorators.language import language, languageCB
 from VIPMUSIC.utils.inline import queue_back_markup, queue_markup
 from config import BANNED_USERS
 
+
+print("[queue] queue, cqueue")
 basic = {}
 
 
