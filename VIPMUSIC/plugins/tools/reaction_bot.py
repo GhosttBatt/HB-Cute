@@ -113,11 +113,3 @@ async def auto_react(_, message):
             await message.reply_text(emoji)
         except:
             pass
-
-# ----------------------------------------
-# /reactiontest for debug
-# ----------------------------------------
-@app.on_message(filters.command("reactiontest") & filters.group)
-async def test_react_cmd(_, message):
-    print("[ReactionBot] /reactiontest command triggered!")
-    await message.reply_text("✅ Reaction test command works!")
