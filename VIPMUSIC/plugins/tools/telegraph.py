@@ -7,6 +7,7 @@ from telegraph import Telegraph, exceptions, upload_file
 
 from VIPMUSIC import telethn as tbot
 from VIPMUSIC.utils.events import register
+print("[telegraph] tgt")
 
 VIP = "Vip"
 TMP_DOWNLOAD_DIRECTORY = "./"
