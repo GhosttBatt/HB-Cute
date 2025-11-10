@@ -6,7 +6,7 @@ from VIPMUSIC import app
 from VIPMUSIC.mongo.readable_time import get_readable_time
 from VIPMUSIC.mongo.afkdb import add_afk, is_afk, remove_afk
 
-
+print("[afk] afk")
 
 @app.on_message(filters.command(["afk", "brb"], prefixes=["/", "!"]))
 async def active_afk(_, message: Message):
