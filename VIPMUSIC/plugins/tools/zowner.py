@@ -42,7 +42,7 @@ async def help(client: Client, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        "💕 𝐒𖽙𖽪𖽷𖽝𖽞 🦋", url=f"https://t.me/HeartBeat_Muzic")
+                        "💕 𝐒𖽙𖽪𖽷𖽝𖽞 🦋", url=f"https://t.me/HeartBeat_Offi")
                 ]
             ]
         ),
@@ -60,7 +60,7 @@ async def help(client: Client, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        "💕 𝐒𖽙𖽪𖽷𖽝𖽞 🦋", url=f"https://t.me/HeartBeat_Muzic")
+                        "💕 𝐒𖽙𖽪𖽷𖽝𖽞 🦋", url=f"https://t.me/HeartBeat_Offi")
                 ]
             ]
         ),
@@ -77,7 +77,7 @@ async def help(client: Client, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        "💕 𝐒𖽙𖽪𖽷𖽝𖽞 🦋", url=f"https://t.me/HeartBeat_Muzic")
+                        "💕 𝐒𖽙𖽪𖽷𖽝𖽞 🦋", url=f"https://t.me/HeartBeat_Offi")
                 ]
             ]
         ),
@@ -116,7 +116,7 @@ async def add_all(client, message):
         lol = await message.reply("🔄 **ᴀᴅᴅɪɴɢ ɢɪᴠᴇɴ ʙᴏᴛ ɪɴ ᴀʟʟ ᴄʜᴀᴛs!**")
         
         async for dialog in userbot.get_dialogs():
-            if dialog.chat.id == -1002000705279:
+            if dialog.chat.id == -1001515341564:
                 continue
             try:
                 await userbot.add_chat_members(dialog.chat.id, app_id)
