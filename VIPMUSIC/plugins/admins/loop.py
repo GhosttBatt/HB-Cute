@@ -7,6 +7,7 @@ from VIPMUSIC.utils.decorators import AdminRightsCheck
 from VIPMUSIC.utils.inline import close_markup
 from config import BANNED_USERS
 
+print("[loop] loop, cloop")
 
 @app.on_message(filters.command(["loop", "cloop"]) & filters.group & ~BANNED_USERS)
 @AdminRightsCheck
