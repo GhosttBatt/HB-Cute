@@ -8,6 +8,7 @@ from VIPMUSIC import app
 from datetime import datetime
 from VIPMUSIC.utils.database import get_assistant
 # Assuming Userbot is defined elsewhere
+print("[botschk] botschk ")
 
 last_checked_time = None
 
