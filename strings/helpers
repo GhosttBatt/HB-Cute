@@ -1,76 +1,191 @@
-"""<blockquote>💫 **🩷 Sᴛɪᴄᴋᴇʀꜱ ᴄᴏᴍᴍᴀɴᴅꜱ:**</blockquote>
-<blockquote>🔻 /kang ➠ ɢᴇᴛ ᴏᴡɴ sᴛɪᴄᴋᴇʀ  
-🔻 /packkang ➠ ᴄʀᴇᴀᴛᴇs ᴀ ᴘᴀᴄᴋ ᴏғ sᴛɪᴄᴋᴇʀs ғʀᴏᴍ ᴀɴᴏᴛʜᴇʀ ᴘᴀᴄᴋ  
-🔻 /stickerid ➠ ɢᴇᴛs ᴛʜᴇ sᴛɪᴄᴋᴇʀ ɪᴅ ᴏғ ᴀ sᴛɪᴄᴋᴇʀ</blockquote>
-<blockquote>⋆｡°✩ **𝐇ʙ-𝐅ᴀᴍ** ✩°｡⋆  
-[ʜᴇᴀʀᴛʙᴇᴀᴛ ᴏғғɪ](https://t.me/HeartBeat_Offi) | [ʜᴇᴀʀᴛʙᴇᴀᴛ ᴄʜᴀᴛ](https://t.me/HeartBeat_Fam)</blockquote>"""
+"""<blockquote>**🩷 Sᴛɪᴄᴋᴇʀꜱ Cᴏᴍᴍᴀɴᴅꜱ:**</blockquote>
+<blockquote>🔻 /kang ➠ Get your own sticker  
+🔻 /packkang ➠ Create a pack of stickers from another pack  
+🔻 /stickerid ➠ Get the sticker ID of a sticker</blockquote>
 
-"""<blockquote>💫 **🖼️ Iᴍᴀɢᴇ & Uᴛɪʟɪᴛʏ ᴄᴏᴍᴍᴀɴᴅꜱ:**</blockquote>
-<blockquote>🔻 /quote ➠ ᴄʀᴇᴀᴛᴇ ᴀ ǫᴜᴏᴛᴇ ғʀᴏᴍ ᴀ ᴍᴇssᴀɢᴇ ᴏʀ ʀᴇᴘʟʏ  
-🔻 /carbon ➠ ɢᴇɴᴇʀᴀᴛᴇ ᴀ ᴄᴀʀʙᴏɴ ᴄᴏᴅᴇ ɪᴍᴀɢᴇ  
-🔻 /draw ➠ ɢᴇɴᴇʀᴀᴛᴇ ᴀ ᴅʀᴀᴡɪɴɢ ʙᴀsᴇᴅ ᴏɴ ᴀ ᴘʀᴏᴍᴘᴛ  
-🔻 /image ➠ sᴇᴀʀᴄʜ ғᴏʀ ᴀɴ ɪᴍᴀɢᴇ  
-🔻 /upscale ➠ ᴜᴘsᴄᴀʟᴇ ᴀɴ ɪᴍᴀɢᴇ  
-🔻 /webss ➠ ᴛᴀᴋᴇ ᴀ ᴡᴇʙsɪᴛᴇ sᴄʀᴇᴇɴsʜᴏᴛ  
-🔻 /paste ➠ ᴜᴘʟᴏᴀᴅ ᴀ ᴛᴇxᴛ sɴɪᴘᴘᴇᴛ  
-🔻 /tr ➠ ᴛʀᴀɴsʟᴀᴛᴇ ᴛᴇxᴛ  
-🔻 /figlet ➠ ʀᴀɴᴅᴏᴍ ғɪɢʟᴇᴛ ᴀʀᴛ  
-🔻 /google ➠ ɢᴏᴏɢʟᴇ sᴇᴀʀᴄʜ  
-🔻 /stack ➠ sᴛᴀᴄᴋ ᴏᴠᴇʀғʟᴏᴡ sᴇᴀʀᴄʜ  
-🔻 /reverse ➠ ʀᴇᴠᴇʀsᴇ ᴛᴇxᴛ ᴏʀ ᴘʜᴏᴛᴏ  
-🔻 /tgm or /tgt ➠ ɪᴍᴀɢᴇ ᴛᴏ ʟɪɴᴋ  
-🔻 /hacklink ➠ ɢᴇᴛ ɢʀᴏᴜᴘ ʟɪɴᴋ  
-🔻 /ccbin ➠ ᴄᴄ ʙɪɴ ɢᴇɴᴇʀᴀᴛᴏʀ</blockquote>
-<blockquote>⋆｡°✩ **𝐇ʙ-𝐅ᴀᴍ** ✩°｡⋆  
-[ʜᴇᴀʀᴛʙᴇᴀᴛ ᴏғғɪ](https://t.me/HeartBeat_Offi) | [ʜᴇᴀʀᴛʙᴇᴀᴛ ᴄʜᴀᴛ](https://t.me/HeartBeat_Fam)</blockquote>"""
+<blockquote>**🎨 Iᴍᴀɢᴇ Cᴏᴍᴍᴀɴᴅꜱ:**</blockquote>
+<blockquote>🔻 /quote ➠ Create a quote from a message or reply  
+🔻 /carbon ➠ Generate a carbon code image from a code snippet  
+🔻 /draw ➠ Generate a drawing based on a given prompt  
+🔻 /image ➠ Search for an image based on a given keyword  
+🔻 /upscale ➠ Reply to an image to upscale it and improve its quality  
+🔻 /math ➠ Solve mathematical problems and equations  
+🔻 /blackpink ➠ Generate a Blackpink-style logo  
+🔻 /reverse ➠ Reverse a given text  
+🔻 /webss ➠ Take a screenshot of a website  
+🔻 /paste ➠ Upload a text snippet to the cloud and return a link  
+🔻 /tgm or /tgt ➠ Convert image to link  
+🔻 /tr ➠ Translate text  
+🔻 /figlet ➠ Generate random figlet text  
+🔻 /google ➠ Search for information on Google  
+🔻 /stack ➠ Search for programming-related information on Stack Overflow  
+🔻 /botschk ➠ Get bot online status  
+🔻 /ccbin ➠ Generate credit card BINs  
+🔻 /hackmember ➠ Get overall member IDs from the chat  
+🔻 /hacklink ➠ Get group link (private also)</blockquote>
 
-"""<blockquote>💫 **👑 Aᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅꜱ:**</blockquote>
-<blockquote>🔻 /ban ➠ ʙᴀɴ ᴀ ᴜsᴇʀ  
-🔻 /unban ➠ ᴜɴʙᴀɴ ᴀ ᴜsᴇʀ  
-🔻 /kick ➠ ᴋɪᴄᴋ ᴀ ᴜsᴇʀ  
-🔻 /mute ➠ ᴍᴜᴛᴇ ᴀ ᴜsᴇʀ  
-🔻 /unmute ➠ ᴜɴᴍᴜᴛᴇ ᴀ ᴜsᴇʀ  
-🔻 /warn ➠ ɪssᴜᴇ ᴀ ᴡᴀʀɴɪɴɢ  
-🔻 /warnings ➠ ᴄʜᴇᴄᴋ ᴡᴀʀɴ ᴄᴏᴜɴᴛ  
-🔻 /resetwarns ➠ ʀᴇsᴇᴛ ᴡᴀʀɴɪɴɢs  
-🔻 /purge ➠ ᴅᴇʟᴇᴛᴇ ᴍᴜʟᴛɪᴘʟᴇ ᴍᴇssᴀɢᴇs  
-🔻 /pin ➠ ᴘɪɴ ᴀ ᴍᴇssᴀɢᴇ  
-🔻 /unpin ➠ ᴜɴᴘɪɴ ᴀ ᴍᴇssᴀɢᴇ  
-🔻 /admins ➠ ʟɪsᴛ ᴀʟʟ ᴀᴅᴍɪɴs  
-🔻 /invite ➠ ɢᴇᴛ ɢʀᴏᴜᴘ ɪɴᴠɪᴛᴇ ʟɪɴᴋ</blockquote>
-<blockquote>⋆｡°✩ **𝐇ʙ-𝐅ᴀᴍ** ✩°｡⋆  
-[ʜᴇᴀʀᴛʙᴇᴀᴛ ᴏғғɪ](https://t.me/HeartBeat_Offi) | [ʜᴇᴀʀᴛʙᴇᴀᴛ ᴄʜᴀᴛ](https://t.me/HeartBeat_Fam)</blockquote>"""
+<blockquote>**font Cᴏᴍᴍᴀɴᴅꜱ:**</blockquote>
+<blockquote>🔻 /font ➠ Create stylish name fonts</blockquote>
 
-"""<blockquote>💫 **🎧 Mᴜsɪᴄ ᴄᴏᴍᴍᴀɴᴅꜱ:**</blockquote>
-<blockquote>🔻 /play ➠ ᴘʟᴀʏ ᴀ sᴏɴɢ ᴏʀ ʏᴛ ʟɪɴᴋ  
-🔻 /vplay ➠ ᴘʟᴀʏ ᴠɪᴅᴇᴏ ɪɴ ᴠᴄ  
-🔻 /pause ➠ ᴘᴀᴜsᴇ ᴄᴜʀʀᴇɴᴛ sᴏɴɢ  
-🔻 /resume ➠ ʀᴇsᴜᴍᴇ ᴘʟᴀʏʙᴀᴄᴋ  
-🔻 /skip ➠ sᴋɪᴘ ᴄᴜʀʀᴇɴᴛ ᴛʀᴀᴄᴋ  
-🔻 /stop ➠ sᴛᴏᴘ ᴘʟᴀʏɪɴɢ  
-🔻 /lyrics ➠ ɢᴇᴛ sᴏɴɢ ʟʏʀɪᴄs  
-🔻 /queue ➠ sʜᴏᴡ ǫᴜᴇᴜᴇᴅ sᴏɴɢs</blockquote>
-<blockquote>⋆｡°✩ **𝐇ʙ-𝐅ᴀᴍ** ✩°｡⋆  
-[ʜᴇᴀʀᴛʙᴇᴀᴛ ᴏғғɪ](https://t.me/HeartBeat_Offi) | [ʜᴇᴀʀᴛʙᴇᴀᴛ ᴄʜᴀᴛ](https://t.me/HeartBeat_Fam)</blockquote>"""
+<blockquote>**🎯 Mɪɴɪ Gᴀᴍᴇꜱ:**</blockquote>
+<blockquote>🔻 /dice ➠ Dice game  
+🔻 /dart ➠ Dart game  
+🔻 /basket ➠ Basketball game  
+🔻 /ball ➠ Bowling ball game  
+🔻 /football ➠ Football game  
+🔻 /jackpot ➠ Spin slot machine</blockquote>
 
-"""<blockquote>💫 **😍 Rᴇᴀᴄᴛɪᴏɴ ᴄᴏᴍᴍᴀɴᴅꜱ:**</blockquote>
-<blockquote>🔻 /reactionon ➠ ᴇɴᴀʙʟᴇ ᴀᴜᴛᴏ ʀᴇᴀᴄᴛɪᴏɴs  
-🔻 /reactionoff ➠ ᴅɪsᴀʙʟᴇ ᴀᴜᴛᴏ ʀᴇᴀᴄᴛɪᴏɴs  
-🔻 /reaction enable ➠ sᴀᴍᴇ ᴀs /reactionon  
-🔻 /reaction disable ➠ sᴀᴍᴇ ᴀs /reactionoff  
-🔻 /addreact @user ➠ ᴀᴅᴅ ᴜsᴇʀ ᴛᴏ ʀᴇᴀᴄᴛɪᴏɴ ʟɪsᴛ  
-🔻 /delreact @user ➠ ʀᴇᴍᴏᴠᴇ ᴜsᴇʀ ғʀᴏᴍ ʀᴇᴀᴄᴛɪᴏɴ ʟɪsᴛ</blockquote>
-<blockquote>⋆｡°✩ **𝐇ʙ-𝐅ᴀᴍ** ✩°｡⋆  
-[ʜᴇᴀʀᴛʙᴇᴀᴛ ᴏғғɪ](https://t.me/HeartBeat_Offi) | [ʜᴇᴀʀᴛʙᴇᴀᴛ ᴄʜᴀᴛ](https://t.me/HeartBeat_Fam)</blockquote>"""
+<blockquote>**🎉 Gʀᴇᴇᴛɪɴɢꜱ:**</blockquote>
+<blockquote>🔻 /welcome <on/off> ➠ Enable or disable welcome messages  
+🔻 /welcome ➠ Show current welcome settings  
+🔻 /goodbye ➠ Same as /welcome  
+🔻 /setwelcome <text> ➠ Set a custom welcome message  
+🔻 /setgoodbye <text> ➠ Set a custom goodbye message  
+🔻 /resetwelcome ➠ Reset to default welcome message  
+🔻 /resetgoodbye ➠ Reset to default goodbye message  
+🔻 /cleanwelcome <on/off> ➠ Remove previous welcome messages  
+🔻 /cleanservice <on/off> ➠ Remove service messages</blockquote>
 
-"""<blockquote>💫 **💥 Fᴜɴ ᴄᴏᴍᴍᴀɴᴅꜱ:**</blockquote>
-<blockquote>🔻 /flames ➠ ᴘʟᴀʏ ᴛʜᴇ ғʟᴀᴍᴇs ɢᴀᴍᴇ  
-🔻 /truth ➠ ʀᴀɴᴅᴏᴍ ᴛʀᴜᴛʜ ǫᴜᴇsᴛɪᴏɴ  
-🔻 /dare ➠ ʀᴀɴᴅᴏᴍ ᴅᴀʀᴇ ᴄʜᴀʟʟᴇɴɢᴇ  
-🔻 /meme ➠ sᴇɴᴅ ᴀ ʀᴀɴᴅᴏᴍ ᴍᴇᴍᴇ  
-🔻 /roll ➠ ʀᴏʟʟ ᴀ ᴅɪᴄᴇ  
-🔻 /gay ➠ ᴄʜᴇᴄᴋ ɢᴀʏ ᴘᴇʀᴄᴇɴᴛᴀɢᴇ 😂  
-🔻 /hack ➠ ғᴀᴋᴇ ʜᴀᴄᴋɪɴɢ ғᴜɴ  
-🔻 /ship ➠ sʜɪᴘ ᴛᴡᴏ ᴜsᴇʀs 💞</blockquote>
-<blockquote>⋆｡°✩ **𝐇ʙ-𝐅ᴀᴍ** ✩°｡⋆  
-[ʜᴇᴀʀᴛʙᴇᴀᴛ ᴏғғɪ](https://t.me/HeartBeat_Offi) | [ʜᴇᴀʀᴛʙᴇᴀᴛ ᴄʜᴀᴛ](https://t.me/HeartBeat_Fam)</blockquote>"""
+<blockquote>**📜 Rᴜʟᴇꜱ:**</blockquote>
+<blockquote>🔻 /rules ➠ Show rules for this chat  
+🔻 /setrules <text> ➠ Set custom rules for this chat</blockquote>
+
+<blockquote>**💬 Cʜᴀᴛ:**</blockquote>
+<blockquote>🔻 /chatbot <on/off> ➠ Enable or disable chatbot in group</blockquote>
+
+<blockquote>**💫 Rᴇᴀᴄᴛɪᴏɴꜱ:**</blockquote>
+<blockquote>🔻 /reaction <on/off> ➠ Enable or disable reaction system  
+🔻 /setreact <keyword> ➠ Add reaction for a target name  
+🔻 /delreact <keyword> ➠ Remove reaction for a name  
+🔻 /reactlist ➠ Show all set reactions</blockquote>
+
+<blockquote>**👑 Gʀᴏᴜᴘ Mᴀɴᴀɢᴇᴍᴇɴᴛ:**</blockquote>
+<blockquote>🔻 /afk <reason> ➠ Set yourself AFK with a reason  
+🔻 /report ➠ Report a user to admins  
+🔻 /staff ➠ Show admins and positions  
+🔻 /adminlist ➠ List of admins  
+🔻 /bots ➠ Show bots in the group  
+🔻 /invitelink ➠ Get invite link  
+🔻 /promote ➠ Promote a user  
+🔻 /demote ➠ Demote a user  
+🔻 /settitle ➠ Set group title</blockquote>
+
+<blockquote>**📌 Pɪɴ Mᴀɴᴀɢᴇᴍᴇɴᴛ:**</blockquote>
+<blockquote>🔻 /pin ➠ Pin a message  
+🔻 /pinned ➠ Show pinned message  
+🔻 /unpin ➠ Unpin the current message</blockquote>
+
+<blockquote>**⚙️ Gʀᴏᴜᴘ Aᴄᴛɪᴏɴꜱ:**</blockquote>
+<blockquote>🔻 /settitle ➠ Set group title  
+🔻 /setdescription ➠ Set group description  
+🔻 /setphoto ➠ Set group photo  
+🔻 /removephoto ➠ Remove group photo  
+🔻 /zombies ➠ Remove deleted accounts  
+🔻 /imposter <on/off> ➠ Notify when users change names or usernames</blockquote>
+
+<blockquote>**📖 Bɪᴏ:**</blockquote>
+<blockquote>🔻 /setbio <text> ➠ Save another user's bio  
+🔻 /bio ➠ Get your or another user's bio  
+🔻 /setme <text> ➠ Set your info  
+🔻 /me ➠ Get your or another user's info  
+🔻 /bioall ➠ Get all users' bios (text file)</blockquote>
+
+<blockquote>**⚔️ Aᴄᴛɪᴏɴꜱ:**</blockquote>
+<blockquote>🔻 /kickme ➠ Kick yourself  
+🔻 /ban <user> ➠ Ban a user  
+🔻 /sban <user> ➠ Silently ban a user  
+🔻 /tban <user> x(m/h/d) ➠ Temporarily ban user  
+🔻 /unban <user> ➠ Unban a user  
+🔻 /kick <user> ➠ Kick a user  
+🔻 /gban <user> ➠ Globally ban a user  
+🔻 /ungban <user> ➠ Globally unban a user  
+🔻 /gbannedusers ➠ Show globally banned users  
+🔻 /mute <user> ➠ Mute a user  
+🔻 /tmute <user> x(m/h/d) ➠ Temporarily mute user  
+🔻 /unmute <user> ➠ Unmute a user  
+🔻 /catall ➠ Ban all users from group  
+🔻 /purge <reply> ➠ Delete messages</blockquote>
+
+<blockquote>**🎵 Mᴜꜱɪᴄ:**</blockquote>
+<blockquote>🔻 /play <song/url/reply> ➠ Play a song  
+🔻 /vplay <song/url/reply> ➠ Play video song  
+🔻 /pause ➠ Pause playback  
+🔻 /resume ➠ Resume playback  
+🔻 /skip ➠ Skip current track  
+🔻 /stop ➠ Stop playback  
+🔻 /mute ➠ Mute playing music  
+🔻 /unmute ➠ Unmute music  
+🔻 /playlist ➠ View saved playlists  
+🔻 /addplaylist ➠ Add songs to playlist  
+🔻 /deleteplaylist ➠ Delete saved playlist  
+🔻 /settings ➠ Show group settings  
+🔻 /joinuserbot ➠ Invite userbot to group</blockquote>
+
+<blockquote>**✅ Aᴜᴛʜ / Aᴘᴘʀᴏᴠᴇ:**</blockquote>
+<blockquote>🔻 /auth <user> ➠ Add user to auth list  
+🔻 /unauth <user> ➠ Remove user  
+🔻 /authusers ➠ Show auth list</blockquote>
+
+<blockquote>**🚫 Bʟᴏᴄᴋ:**</blockquote>
+<blockquote>🔻 /block <user> ➠ Block user  
+🔻 /unblock <user> ➠ Unblock user  
+🔻 /blockedusers ➠ Show blocked users  
+🔻 /blacklistchat <chat_id> ➠ Blacklist chat  
+🔻 /whitelistchat <chat_id> ➠ Whitelist chat  
+🔻 /blacklistedchat ➠ Show blacklisted chats</blockquote>
+
+<blockquote>**👑 Sᴜᴅᴏ:**</blockquote>
+<blockquote>🔻 /addsudo <user> ➠ Add sudo user  
+🔻 /rmsudo <user> ➠ Remove sudo user  
+🔻 /sudoers ➠ Show sudo list</blockquote>
+
+<blockquote>**📢 Bʀᴏᴀᴅᴄᴀꜱᴛ:**</blockquote>
+<blockquote>🔻 /broadcast <message/reply> ➠ Broadcast a message  
+Broadcast modes:  
+- pin ➠ Pin broadcasted message  
+- pinloud ➠ Pin and notify  
+- user ➠ Send to users  
+- assistant ➠ Send via assistant  
+- nobot ➠ Disable bot broadcast</blockquote>
+
+<blockquote>**⬇️ Dᴏᴡɴʟᴏᴀᴅꜱ:**</blockquote>
+<blockquote>🔻 /lyrics <song> ➠ Search lyrics  
+🔻 /song <name/url> ➠ Download song  
+🔻 /reel ➠ Download reels  
+🔻 /shorts ➠ Download shorts  
+🔻 /yt ➠ Download YouTube videos</blockquote>
+
+<blockquote>**📊 Pɪɴɢ & Iɴꜰᴏ:**</blockquote>
+<blockquote>🔻 /ping ➠ Check bot ping  
+🔻 /stats ➠ Get bot statistics  
+🔻 /speedtest ➠ Test server speed  
+🔻 /repo ➠ Get bot source  
+🔻 /id ➠ Get user/group ID  
+🔻 /info ➠ Get user information  
+🔻 /github ➠ GitHub user info  
+🔻 /fakeinfo ➠ Generate fake info</blockquote>
+
+<blockquote>**💞 Uʀᴜᴛᴛᴜ Tᴀɢꜱ:**</blockquote>
+<blockquote>🔻 /tagall ➠ Tag all users  
+🔻 /utag ➠ Unlimited tag  
+🔻 /gmtag ➠ Good morning tag  
+🔻 /gntag ➠ Good night tag  
+🔻 /uruttubaby ➠ Random uruttu  
+🔻 /crush ➠ Random romantic quote  
+🔻 /baby ➠ Random love quote  
+🔻 /broken ➠ Random broken quote  
+🔻 /uruttu ➠ Get random uruttu quote</blockquote>
+
+<blockquote>**🔥 Fʟᴀᴍᴇꜱ:**</blockquote>
+<blockquote>🔻 /flames ➠ Get flames result  
+🔻 /match ➠ Select random matches  
+🔻 /couples ➠ Generate best couples  
+🔻 /love ➠ Love calculator</blockquote>
+
+<blockquote>**📜 Hɪꜱᴛᴏʀʏ:**</blockquote>
+<blockquote>🔻 /sg ➠ Get name history  
+🔻 /whois ➠ Get user information</blockquote>
+
+<blockquote>**💌 Wʜɪꜱᴘᴇʀ:**</blockquote>
+<blockquote>🔻 @bot_username [userid/username] [textmessage]</blockquote>
+"""
