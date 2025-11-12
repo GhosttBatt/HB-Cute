@@ -4,7 +4,7 @@ from pyrogram import filters, types
 from pyrogram.types import InlineKeyboardMarkup, Message
 
 from VIPMUSIC import app
-from VIPMUSIC.utils import first_page, second_page
+from VIPMUSIC.utils import first_page, second_page, third_page
 from VIPMUSIC.utils.database import get_lang
 from VIPMUSIC.utils.decorators.language import LanguageStart, languageCB
 from VIPMUSIC.utils.inline.help import help_back_markup, private_help_panel
