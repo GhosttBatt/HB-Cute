@@ -281,3 +281,8 @@ HELP_33 = """<blockquote>**🔥 ꜰʟᴀᴍᴇꜱ:**</blockquote>
 <blockquote>⋆｡°✩ **𝐇ʙ-𝐅ᴀᴍ** ✩°｡⋆  
 [ʜᴇᴧꝛᴛʙᴇᴧᴛ ᴏғғɪ](https://t.me/HeartBeat_Offi) | [ʜᴇᴧꝛᴛʙᴇᴧᴛ ᴄʜᴧᴛ](https://t.me/HeartBeat_Fam)</blockquote>"""
 
+
+
+HELP_50 = """👾 𝐒ᴇʀᴠᴇʀ-𝐁ᴜ𝗌ʏ"""
+
+
