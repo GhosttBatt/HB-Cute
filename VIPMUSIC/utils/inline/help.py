@@ -7,7 +7,7 @@ from VIPMUSIC import app
 def first_page(_):
 	controll_button = [
 		InlineKeyboardButton(text="💕 𝐌𖾔𖽡𖽪 🦋", callback_data=f"settingsback_helper"),
-		InlineKeyboardButton(text="💕 𝐍𖾔𝅃𖾓 🦋", callback_data=f"dilXaditi")
+		InlineKeyboardButton(text="💕 𝐍𖾔𝅃𖾓 🦋", callback_data=f"GhostPage1")
 	]
 	first_page_menu = InlineKeyboardMarkup(
 		[
@@ -39,7 +39,9 @@ def first_page(_):
 
 
 def second_page(_):
-	controll_button = [InlineKeyboardButton(text="💕 𝐁꘍𖽝ᴋ 🦋", callback_data=f"settings_back_helper")]
+	controll_button = [InlineKeyboardButton(text="💕 𝐁꘍𖽝ᴋ 🦋", callback_data=f"settings_back_helper"),
+					   InlineKeyboardButton(text="💕 𝐍𖾔𝅃𖾓 🦋", callback_data=f"GhostPage2")
+					  ]
 	second_page_menu = InlineKeyboardMarkup(
 		[
 			[
