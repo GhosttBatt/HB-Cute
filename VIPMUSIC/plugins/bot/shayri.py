@@ -318,15 +318,15 @@ async def shayri_group(client: Client, message: Message):
 @app.on_message(
     filters.command(SHAYRI_COMMAND) & filters.private
 )
-async def shayri_private(client: Client, message: Message):
+async def shayri_private(client: Client, message: Message, _):
     await message.reply_text(
         f"<blockquote>{random.choice(SHAYRI)}</blockquote>",
         #parse_mode="html",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton(text=["NET"], url="https://t.me/HeartBeat_Offi"),
-                    InlineKeyboardButton(text=["CHT"], url="https://t.me/HeartBeat_Fam"),
+                    InlineKeyboardButton(text=_["NET"], url="https://t.me/HeartBeat_Offi"),
+                    InlineKeyboardButton(text=_["CHT"], url="https://t.me/HeartBeat_Fam"),
                 ]
             ]
         ),
