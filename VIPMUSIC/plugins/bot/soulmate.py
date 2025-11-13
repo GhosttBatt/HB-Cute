@@ -1,4 +1,4 @@
-
+from VIPMUSIC.utils.decorators.language import language
 from pyrogram import Client, filters
 import requests
 import random
@@ -6,6 +6,7 @@ import os
 import re
 import asyncio
 import time
+from config
 from VIPMUSIC import app
 from time import time
 import asyncio
@@ -127,21 +128,17 @@ SHAYRI = [ "**𝑵𝒆𝒆 𝑷𝒂𝒕𝒉𝒂 𝑷𝒐𝒅𝒖𝒎 𝑯𝒆�
 SHAYRI_COMMAND = ["soul", "soulmate"]
 
 @app.on_message(
-    filters.command(SHAYRI_COMMAND) & filters.group
-)
-async def shayri_group(client: Client, message: Message):
+    filters.command(SHAYRI_COMMAND) & filters.group)
+@language
+async def shayri_group(client: Client, message: Message, _):
     await message.reply_text(
         f"<blockquote>{random.choice(SHAYRI)}</blockquote>",
-        #parse_mode="html",
+        #parse_mode="markdown",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton(
-                        "💕 𝐍𖽞𖾓𖾟𖽙𖾖ᴋ 🦋", url="https://t.me/HeartBeat_Offi"
-                    ),
-                    InlineKeyboardButton(
-                        "💕 𝐎𖾟𖽡𖽞𖾖 🦋", url="https://t.me/HeartBeat_Fam"
-                    ),
+                    InlineKeyboardButton(text=_["CHT"], url="https://t.me/{SUPPORT_CHAT})"),
+                    InlineKeyboardButton(text=_["NET"], url="https://t.me/{UPDATE_CHANNEL})"),
                 ]
             ]
         ),
@@ -149,21 +146,17 @@ async def shayri_group(client: Client, message: Message):
 
 
 @app.on_message(
-    filters.command(SHAYRI_COMMAND) & filters.private
-)
-async def shayri_private(client: Client, message: Message):
+    filters.command(SHAYRI_COMMAND) & filters.private)
+@language
+async def shayri_private(client: Client, message: Message, _):
     await message.reply_text(
         f"<blockquote>{random.choice(SHAYRI)}</blockquote>",
-        #parse_mode="html",
+        #parse_mode="markdown",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton(
-                        "💕 𝐍𖽞𖾓𖾟𖽙𖾖ᴋ 🦋", url="https://t.me/HeartBeat_Offi"
-                    ),
-                    InlineKeyboardButton(
-                        "💕 𝐎𖾟𖽡𖽞𖾖 🦋", url="https://t.me/HeartBeat_Muzic"
-                    ),
+                    InlineKeyboardButton(text=_["CHT"], url="https://t.me/{SUPPORT_CHAT})"),
+                    InlineKeyboardButton(text=_["NET"], url="https://t.me/{UPDATE_CHANNEL})"),
                 ]
             ]
         ),
