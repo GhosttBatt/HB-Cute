@@ -14,6 +14,8 @@ from VIPMUSIC.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
 from VIPMUSIC import telethn
 
+from BioLink.biolink import biolink  # 👈 import BioLink 
+
 async def init():
     if (
         not config.STRING1
@@ -36,6 +38,7 @@ async def init():
     except:
         pass
     await app.start()
+    await biolink()  # ✅ Start BioLink . disable biolink. remove this line only
     for all_module in ALL_MODULES:
         importlib.import_module("VIPMUSIC.plugins" + all_module)
     LOGGER("VIPMUSIC.plugins").info("𝐀𝐥𝐥 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬 𝐋𝐨𝐚𝐝𝐞𝐝 𝐁𝐚𝐛𝐲🥳...")
