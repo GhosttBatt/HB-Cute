@@ -7,7 +7,7 @@ from VIPMUSIC.utils import bot_sys_stats
 from VIPMUSIC.utils.decorators.language import language
 from VIPMUSIC.utils.inline import supp_markup
 from VIPMUSIC.utils.inline import close_markup
-from config import BANNED_USERS
+from config import BANNED_USERS, PING_IMG_URL
 import aiohttp
 import asyncio
 from io import BytesIO
@@ -68,7 +68,7 @@ async def ping_com(client, message: Message, _):
         user_command_count[user_id] = 1
         user_last_message_time[user_id] = current_time
 
-    PING_IMG_URL = "https://graph.org/file/ffdb1be822436121cf5fd.png"
+    #PING_IMG_URL = "https://graph.org/file/ffdb1be822436121cf5fd.png"
     captionss = "**𝑊𝑎𝑖𝑡 𝑃𝑎𝑛𝑛𝑟𝑎 🥹 𝑃𝑖𝑛𝑔 𝐴𝑔𝑎𝑛𝑢𝑚 🤌🏻💙✨**"
     response = await message.reply_photo(PING_IMG_URL, caption=(captionss))
     await asyncio.sleep(1)
@@ -104,15 +104,15 @@ async def ping_com(client, message: Message, _):
         ],
         [
             InlineKeyboardButton(
-                text="💕 𝐆𖽷𖽙𖽪𖽳 🦋", url=f"https://t.me/HeartBeat_Muzic",
+                text=_["CHT"], url=f"https://t.me/HeartBeat_FAM",
             ),
             InlineKeyboardButton(
-                text="💕 𝐎𖾟𖽡𖽞𖾖 🦋", url=f"https://t.me/HeartBeat_Muzic",
+                text=_["NET"], url=f"https://t.me/HeartBeat_Offi",
             )
         ],
         [
             InlineKeyboardButton(
-                text="💕 𝐇𖽞𖾘𖽳 🦋", url=f"https://t.me/{app.username}?start=help"
+                text=_["S_B_12"], url=f"https://t.me/{app.username}?start=help"
             )
         ],
     ]
@@ -120,8 +120,8 @@ async def ping_com(client, message: Message, _):
         )
     await response.delete()
 
-    close_button = InlineKeyboardButton("💕 𝐂𖾘𖽙𖾗𖽞 🦋", callback_data="close_data")
-    inline_keyboard = InlineKeyboardMarkup([[close_button]])
+    #close_button = InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close_data")
+    #inline_keyboard = InlineKeyboardMarkup([[close_button]])
 
 @app.on_callback_query(filters.regex("^close_data"))
 async def close_callback(_, query):
