@@ -33,6 +33,12 @@ LOG_CHANNEL = int(getenv("LOG_CHANNEL", "-1001735663878")) #fed_logs
 OWNER_ID = int(getenv("OWNER_ID", 1281282633))
 SUDOERS = getenv("SUDOERS", "1281282633 8399160924 6773435708").split()
 
+# Regex pattern to detect URLs in user bios
+URL_PATTERN = re.compile(
+    r"((https?://|http://|www\.)[^\s]+|t\.me/[^\s]+|telegram\.me/[^\s]+|bit\.ly/[^\s]+|tinyurl\.com/[^\s]+|@[a-zA-Z0-9_]+)",
+    re.IGNORECASE
+)
+
 ## Fill these variables if you're deploying on heroku.
 HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
 # Get it from http://dashboard.heroku.com/account
@@ -40,7 +46,7 @@ HEROKU_API_KEY = getenv("HEROKU_API_KEY", "HRKU-fc1b7aea-b37a-4015-9877-8c3967ee
 
 UPSTREAM_REPO = getenv(
     "UPSTREAM_REPO",
-    "https://github.com/reborndigitals/HB-Cute",
+    "https://github.com/GhosttBatt/HB-Cute",
 )
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "master")
 GIT_TOKEN = getenv(
