@@ -1,6 +1,6 @@
 from pyrogram import Client, filters, errors
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ChatPermissions
-from helper.utils import (
+from BioLink.helper.utils import (
     is_admin,
     get_config, update_config,
     increment_warning, reset_warnings,
