@@ -6,7 +6,7 @@ import os
 import re
 import asyncio
 import time
-from config
+import config
 from VIPMUSIC import app
 from time import time
 import asyncio
