@@ -213,13 +213,13 @@ ping_2 : "<blockquote>❖ {1}\n\n🏓 ᴘɪɴɢ..ᴩᴏɴɢ : {0}ᴍs..\n\n❖ s
 queue_1 : "<blockquote>❖ ғᴇᴛᴄʜɪɴɢ ǫᴜᴇᴜᴇ...</blockquote>\n\n<blockquote>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ...</blockquote>"
 queue_2 : "<blockquote>❖ ǫᴜᴇᴜᴇ ᴇᴍᴘᴛʏ.</blockquote>"
 queue_3 : "<blockquote><u>❖ ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ᴄʜᴇᴄᴋ ᴛʜᴇ ʟɪsᴛ ᴏғ ᴛʜᴇ ǫᴜᴇᴜᴇᴅ ᴛʀᴀᴄᴋs :</u> <a href={0}>ʜᴇʀᴇ</a></blockquote>"
-queue_4 : "<blockquote><b>❖ ηω: нɛαятвɛαт ⏤͟͞●</b>#{0}</b></blockquote>\n<blockquote>‣ Tɪᴛʟє ➠ </b> {1}\n<b>❍ Dυʀᴧᴛɪση ➠ </b> {2} ϻɪηυᴛєs\n<b>❍ Rєǫυєsᴛєᴅ ʙʏ ➠ </b> {3}</blockquote>\n<blockquote>ᴄʟᴏɴᴇ: @CloneMusicRobot</blockquote>"
+queue_4 : "<blockquote><b>❖ ηω: нɛαятвɛαт ⏤͟͞●</b>#{0}</b></blockquote>\n<blockquote>‣ Tɪᴛʟє ➠ </b> {1}\n<b>❍ Dυʀᴧᴛɪση ➠ </b> {2} ϻɪηυᴛєs\n<b>❍ Rєǫυєsᴛєᴅ ʙʏ ➠ </b> {3}</blockquote>\n<blockquote>𝐅ᴏᴜɴᴅᴇʀ: [𝐆ʜᴏ𝗌ᴛ-𝐁ᴀᴛ](https://t.me/GhosttBatt)</blockquote>"
 queue_5 : "<blockquote>❖ ᴛʜᴇʀᴇ's ᴏɴʟʏ ᴏɴᴇ ǫᴜᴇᴜᴇᴅ ᴛʀᴀᴄᴋ ɪɴ ᴘʟᴀʏʟɪsᴛ.</blockquote>\n\n<blockquote>ᴀᴅᴅ ᴍᴏʀᴇ ᴛʀᴀᴄᴋs ᴛᴏ ᴄʜᴇᴄᴋ ʟɪsᴛ.</blockquote>"
 queue_6 : "<blockquote><b>🕚 ᴅᴜʀᴀᴛɪᴏɴ :</b> ᴜɴᴋɴᴏᴡɴ ᴅᴜʀᴀᴛɪᴏɴ sᴛʀᴇᴀᴍ</blockquote>\n\n<blockquote>ᴄʟɪᴄᴋ ᴏɴ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ ᴡʜᴏʟᴇ ǫᴜᴇᴜᴇᴅ ʟɪsᴛ.</blockquote>"
 queue_7 : "\n<blockquote>❖ ᴄʟɪᴄᴋ ᴏɴ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ ᴡʜᴏʟᴇ ǫᴜᴇᴜᴇᴅ ʟɪsᴛ.</blockquote>"
 queue_8 : "<blockquote><b>{0} ᴘʟᴀʏᴇʀ</b></blockquote>\n\n<blockquote>🎄 <b>sᴛʀᴇᴀᴍɪɴɢ :</b> {1}\n\n🔗 <b>❖ sᴛʀᴇᴀᴍ ᴛʏᴘᴇ :</b> {2}\n🦋 <b>❖ ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ :</b> {3}\n{4}</blockquote>"
 
-stream_1 : "<blockquote><b>❖ ηєтωσяк: [нɛαятвɛαт](https://t.me/HeartBeat_Offi) ⏤͟͞●</b></blockquote>\n<blockquote><b>❍ ᴛɪᴛʟє ➥</b> <a href={0}>{1}</a> \n<b>❍ ᴛɪϻє ➥</b> {2} ϻɪηυᴛєs \n<b>❍ ʙʏ ➥</b> {3}</blockquote>\n<blockquote>ᴄʟᴏɴᴇ: @CloneMusicRobot</blockquote>"
+stream_1 : "<blockquote><b>❖ ηєтωσяк: [нɛαятвɛαт](https://t.me/HeartBeat_Offi) ⏤͟͞●</b></blockquote>\n<blockquote><b>❍ ᴛɪᴛʟє ➥</b> <a href={0}>{1}</a> \n<b>❍ ᴛɪϻє ➥</b> {2} ϻɪηυᴛєs \n<b>❍ ʙʏ ➥</b> {3}</blockquote>\n<blockquote>𝐅ᴏᴜɴᴅᴇʀ: [𝐆ʜᴏ𝗌ᴛ-𝐁ᴀᴛ](https://t.me/GhosttBatt)</blockquote>"
 stream_2 : "<blockquote><b>❖ ᴍᴜsᴜᴄ ʙᴏᴛ ση sᴛʀєᴧϻɪηɢ ⏤͟͞●</b></blockquote>\n\n<blockquote><b>❍ sᴛʀєᴧϻ ᴛʏᴘє ➥</b> ʟɪᴠєsᴛʀєᴧϻ [ υʀʟ ]\n<b>❍ ʙʏ ➥</b> {0}</blockquote>"
 
 CLOSE_BUTTON  : "🗑ᴄʟᴏsᴇ🗑"
