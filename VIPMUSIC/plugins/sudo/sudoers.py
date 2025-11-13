@@ -50,23 +50,25 @@ async def userdel(client, message: Message, _):
 photo_url = "https://graph.org/file/ffdb1be822436121cf5fd.png"
 
 @app.on_message(filters.command(["cgsudo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]) & ~BANNED_USERS)
-async def sudoers_list(client, message: Message):
-    keyboard = [[InlineKeyboardButton("💕 𝐕𖽹𖽞𖽮  𝐎𖾟𖽡𖽞𖾖 🦋", callback_data="check_sudo_list")]]
+@language
+async def sudoers_list(client, message: Message, _):
+    keyboard = [[InlineKeyboardButton(text=_["OWN"], callback_data="check_sudo_list")]]
     reply_markups = InlineKeyboardMarkup(keyboard)
     await message.reply_photo(photo=photo_url, caption="**» ᴄʜᴇᴄᴋ sᴜᴅᴏ ʟɪsᴛ ʙʏ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ.**\n\n**» ɴᴏᴛᴇ:**  ᴏɴʟʏ sᴜᴅᴏ ᴜsᴇʀs ᴄᴀɴ ᴠɪᴇᴡ. ", reply_markup=reply_markups)
 
 @app.on_callback_query(filters.regex("^check_sudo_list$"))
-async def check_sudo_list(client, callback_query: CallbackQuery):
+@language
+async def check_sudo_list(client, callback_query: CallbackQuery, _):
     keyboard = []
     if callback_query.from_user.id not in SUDOERS:
-        return await callback_query.answer("🍂 𝑃𝑒𝑡𝑟𝑜𝑚𝑎𝑥 𝐿𝑎𝑖𝑡𝑡𝑒 𝑇ℎ𝑎𝑎𝑛 𝑉𝑒𝑛𝑢𝑚𝑎 🍂", show_alert=True)
+        return await callback_query.answer("ᴄᴀɴɴᴏᴛ ᴀᴄᴄᴇss", show_alert=True)
     else:
         user = await app.get_users(OWNER_ID)
 
         user_mention = (user.first_name if not user.mention else user.mention)
-        caption = f"**˹ʟɪsᴛ ᴏғ ʙᴏᴛ ᴍᴏᴅᴇʀᴀᴛᴏʀs˼**\n\n**💕 𝐎𖾟𖽡𖽞𖾖 🦋**  {user_mention}\n\n"
+        caption = f"**˹ʟɪsᴛ ᴏғ ʙᴏᴛ ᴍᴏᴅᴇʀᴀᴛᴏʀs˼**\n\n  {user_mention}\n\n"
 
-        keyboard.append([InlineKeyboardButton("💕𝐕𖽹𖽞𖽮  𝐎𖾟𖽡𖽞𖾖 🦋", url=f"tg://openmessage?user_id={OWNER_ID}")])
+        keyboard.append([InlineKeyboardButton(text=_["OWN"], url=f"tg://openmessage?user_id={OWNER_ID}")])
         
         count = 1
         for user_id in SUDOERS:
