@@ -1,4 +1,4 @@
-from VIPMUSIC.utils.decorators.language import language
+from VIPMUSIC.utils.decorators.language import language # NTW and CHT 
 from pyrogram import Client, filters
 import requests
 import random
@@ -293,22 +293,16 @@ SHAYRI_COMMAND = ["pickupline", "uruttu", "urutu", "pickup"]
 
 @app.on_message(
     filters.command(SHAYRI_COMMAND) & filters.group
-)
-async def shayri_group(client: Client, message: Message):
+) @language
+async def shayri_group(client: Client, message: Message, _):
     await message.reply_text(
         f"<blockquote>{random.choice(SHAYRI)}</blockquote>",
         #parse_mode="html",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton(
-                        "💕 𝐍𖽞𖾓𖾟𖽙𖾖ᴋ 🦋",
-                        url="https://t.me/HeartBeat_Offi"
-                    ),
-                    InlineKeyboardButton(
-                        "💕 𝐎𖾟𖽡𖽞𖾖 🦋",
-                        url="https://t.me/HeartBeat_Fam"
-                    ),
+                    InlineKeyboardButton(text=_["NET"], url="https://t.me/HeartBeat_Offi"),
+                    InlineKeyboardButton(text=_["CHT"], url="https://t.me/HeartBeat_Fam"),
                 ]
             ]
         ),
@@ -317,7 +311,7 @@ async def shayri_group(client: Client, message: Message):
 
 @app.on_message(
     filters.command(SHAYRI_COMMAND) & filters.private
-)
+) @language
 async def shayri_private(client: Client, message: Message, _):
     await message.reply_text(
         f"<blockquote>{random.choice(SHAYRI)}</blockquote>",
