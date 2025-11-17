@@ -118,7 +118,7 @@ async def is_admin_or_sudo(client, message: Message) -> Tuple[bool, Optional[str
         return False, f"error={e}"
 
 # ---------------- INLINE BUTTON PANEL (/react COMMAND) ----------------
-@app.on_message(filters.command("react") & ~BANNED_USERS)
+@app.on_message(filters.command("reaction") & ~BANNED_USERS)
 async def react_command(client, message: Message):
     global REACTION_ENABLED
 
