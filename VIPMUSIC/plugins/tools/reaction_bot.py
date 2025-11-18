@@ -11,18 +11,22 @@ from pyrogram.types import (
 from pyrogram.enums import ChatMemberStatus
 
 from VIPMUSIC import app
-from config import BANNED_USERS, START_REACTIONS, OWNER_ID
+from config import BANNED_USERS, MENTION_USERNAMES, START_REACTIONS, OWNER_ID
 from VIPMUSIC.utils.database import mongodb, get_sudoers
 
-print("[reaction] compact manager (commands removed: addreact, delreact, reactlist, clearreact)")
+print("[reaction] addreact, delreact, reactlist, clearreact, react toggle buttons")
 
 # ---------------- DATABASE ----------------
+COLLECTION = mongodb["reaction_mentions"]
 SETTINGS = mongodb["reaction_settings"]  # reaction ON/OFF switch storage
 
 # ---------------- STATE ----------------
 REACTION_ENABLED = True  # default ON
 
-# ---------------- VALID REACTIONS ----------------
+# ---------------- CACHE ----------------
+custom_mentions: Set[str] = set(x.lower().lstrip("@") for x in MENTION_USERNAMES)
+
+# ---------------- VALID REACTION EMOJIS ----------------
 VALID_REACTIONS = {
     "❤️", "💖", "💘", "💞", "💓", "✨", "🔥", "💫",
     "💥", "🌸", "😍", "🥰", "💎", "🌙", "🌹", "😂",
@@ -51,15 +55,26 @@ def next_emoji(chat_id: int) -> str:
     chat_used_reactions[chat_id] = used
     return emoji
 
+# ---------------- LOAD CUSTOM MENTIONS ----------------
+async def load_custom_mentions():
+    try:
+        docs = await COLLECTION.find().to_list(None)
+        for doc in docs:
+            name = doc.get("name")
+            if name:
+                custom_mentions.add(str(name).lower().lstrip("@"))
+        print(f"[Reaction Manager] Loaded {len(custom_mentions)} triggers.")
+    except Exception as e:
+        print(f"[Reaction Manager] DB load error: {e}")
+
+asyncio.get_event_loop().create_task(load_custom_mentions())
+
 # ---------------- LOAD SWITCH STATE ----------------
 async def load_reaction_state():
     global REACTION_ENABLED
-    try:
-        doc = await SETTINGS.find_one({"_id": "switch"})
-        if doc:
-            REACTION_ENABLED = doc.get("enabled", True)
-    except Exception as e:
-        print(f"[Reaction Switch] DB read error: {e}")
+    doc = await SETTINGS.find_one({"_id": "switch"})
+    if doc:
+        REACTION_ENABLED = doc.get("enabled", True)
     print(f"[Reaction Switch] Loaded => {REACTION_ENABLED}")
 
 asyncio.get_event_loop().create_task(load_reaction_state())
@@ -75,11 +90,9 @@ async def is_admin_or_sudo(client, message: Message) -> Tuple[bool, Optional[str
     except Exception:
         sudoers = set()
 
-    # Owner & sudo
     if user_id and (user_id == OWNER_ID or user_id in sudoers):
         return True, None
 
-    # Linked channel admin
     sender_chat_id = getattr(message.sender_chat, "id", None)
     if sender_chat_id:
         try:
@@ -89,14 +102,12 @@ async def is_admin_or_sudo(client, message: Message) -> Tuple[bool, Optional[str
         except Exception:
             pass
 
-    # Must be group or channel
     if chat_type not in ("chattype.group", "chattype.supergroup", "chattype.channel"):
         return False, f"chat_type={chat_type}"
 
     if not user_id:
         return False, "no from_user"
 
-    # Admin check
     try:
         member = await client.get_chat_member(chat_id, user_id)
         if member.status in (ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR):
@@ -136,7 +147,7 @@ async def react_command(client, message: Message):
         reply_markup=keyboard
     )
 
-# ---------------- CALLBACK HANDLER ----------------
+# ---------------- CALLBACK HANDLER FOR BUTTONS ----------------
 @app.on_callback_query(filters.regex("^react_"))
 async def reaction_callback(client, query: CallbackQuery):
     global REACTION_ENABLED
@@ -166,19 +177,62 @@ async def reaction_callback(client, query: CallbackQuery):
 # ---------------- AUTO REACTION SYSTEM ----------------
 @app.on_message((filters.text | filters.caption) & ~BANNED_USERS)
 async def react_on_mentions(client, message: Message):
+
     if not REACTION_ENABLED:
         return
 
     try:
-        # Ignore commands
         if message.text and message.text.startswith("/"):
             return
 
         chat_id = message.chat.id
+        text = (message.text or message.caption or "").lower()
+        entities = (message.entities or []) + (message.caption_entities or [])
+        usernames, user_ids = set(), set()
 
-        # Auto reaction — always react since mention logic is removed
-        emoji = next_emoji(chat_id)
-        await message.react(emoji)
+        for ent in entities:
+            if ent.type == "mention":
+                uname = (message.text or message.caption)[ent.offset:ent.offset + ent.length].lstrip("@").lower()
+                usernames.add(uname)
+            elif ent.type == "text_mention" and ent.user:
+                user_ids.add(ent.user.id)
+                if ent.user.username:
+                    usernames.add(ent.user.username.lower())
+
+        reacted = False
+
+        for uname in usernames:
+            if uname in custom_mentions or f"@{uname}" in text:
+                emoji = next_emoji(chat_id)
+                try:
+                    await message.react(emoji)
+                except:
+                    await message.react("❤️")
+                reacted = True
+                break
+
+        if not reacted:
+            for uid in user_ids:
+                if f"id:{uid}" in custom_mentions:
+                    emoji = next_emoji(chat_id)
+                    try:
+                        await message.react(emoji)
+                    except:
+                        await message.react("❤️")
+                    reacted = True
+                    break
+
+        if not reacted:
+            for trig in custom_mentions:
+                if trig.startswith("id:"):
+                    continue
+                if trig in text or f"@{trig}" in text:
+                    emoji = next_emoji(chat_id)
+                    try:
+                        await message.react(emoji)
+                    except:
+                        await message.react("❤️")
+                    break
 
     except Exception as e:
         print(f"[react_on_mentions] error: {e}")
