@@ -209,7 +209,7 @@ async def react_on_mentions(client, message: Message):
         if message.text and message.text.startswith("!"):
             return
 
-        if message.text and message.text.startswith("@"):
+        if message.text and message.text.startswith("$"):
             return
 
         if message.text and message.text.startswith("."):
