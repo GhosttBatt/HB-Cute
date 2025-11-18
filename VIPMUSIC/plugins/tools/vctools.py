@@ -5,59 +5,57 @@ from VIPMUSIC import app
 from config import OWNER_ID
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-import aiohttp  # REQUIRED
-import re       # REQUIRED
+import aiohttp
+import re
+from pyrogram.types import InlineKeyboardButton as Button
 
 
-# vc on
+# -------------------- VC STARTED -------------------- #
 @app.on_message(filters.video_chat_started)
 @language
-async def brah(_, msg: Message):
-    await msg.reply(_["VC_START"])
+async def brah(client, msg: Message, lang):
+    await msg.reply(lang["VC_START"])
 
 
-# vc off
+# -------------------- VC ENDED -------------------- #
 @app.on_message(filters.video_chat_ended)
 @language
-async def brah2(_, msg: Message):
-    await msg.reply(_["VC_END"])
+async def brah2(client, msg: Message, lang):
+    await msg.reply(lang["VC_END"])
 
 
-# invite members to vc
+# -------------------- VC MEMBERS INVITED -------------------- #
 @app.on_message(filters.video_chat_members_invited)
 @language
-async def brah3(_, message: Message):
+async def brah3(client, message: Message, lang):
     app = message._client
 
     text = (
         f"<blockquote>**нɛʏ, {message.from_user.mention}**</blockquote>"
-        f"<blockquote>{_['VC_INVITE']}</blockquote>"
+        f"<blockquote>{lang['VC_INVITE']}</blockquote>"
     )
-    x = 0
+
     for user in message.video_chat_members_invited.users:
         try:
             text += f"[{user.first_name}](tg://user?id={user.id}) "
-            x += 1
-        except Exception:
+        except:
             pass
 
     try:
         invite_link = await app.export_chat_invite_link(message.chat.id)
         add_link = f"https://t.me/{app.username}?startgroup=true"
-        reply_text = f"{text} 🤭🤭"
 
         await message.reply(
-            reply_text, 
+            f"{text} 🤭🤭",
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton(text=_["VC_BUTTON"], url=add_link)],
+                [InlineKeyboardButton(text=lang["VC_BUTTON"], url=add_link)],
             ])
         )
     except Exception as e:
         print(f"Error: {e}")
 
 
-#### MATH ####
-
+# -------------------- MATH -------------------- #
 @app.on_message(filters.command("math", prefixes="/"))
 def calculate_math(client, message: Message):
     try:
@@ -74,17 +72,14 @@ def calculate_math(client, message: Message):
     message.reply(response)
 
 
-#### SEARCH ####
-
-from pyrogram.types import InlineKeyboardButton as Button  # For your logic (Button.inline)
-
+# -------------------- SEARCH -------------------- #
 @app.on_message(filters.command(["spg"], ["/", "!", "."]))
 async def search(event):
-    # Pyrogram DOES NOT have "respond". Use reply() to keep your logic unchanged.
     msg = await event.reply("Searching...")
 
     async with aiohttp.ClientSession() as session:
         start = 1
+
         url = (
             "https://content-customsearch.googleapis.com/customsearch/v1"
             f"?cx=ec8db9e1f9e41e65e"
