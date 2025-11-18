@@ -16,16 +16,14 @@ COLLECTION = mongodb["reaction_mentions"]
 # ---------------- CACHE ----------------
 custom_mentions: Set[str] = set(x.lower().lstrip("@") for x in MENTION_USERNAMES)
 
-# ---------------- VALID REACTION EMOJIS ----------------
+# ---------------- VALID TELEGRAM REACTIONS ONLY ----------------
 VALID_REACTIONS = {
-    "❤️", "💖", "💘", "💞", "💓", "✨", "🔥", "💫",
-    "💥", "🌸", "😍", "🥰", "💎", "🌙", "🌹", "😂",
-    "😎", "🤩", "😘", "😉", "🤭", "💐", "😻", "🥳"
+    "👍", "👎", "❤️", "🔥", "👏",
+    "😁", "🤔", "😢", "🤯", "😍",
+    "🤬", "😱", "🎉", "🤩", "🙏"
 }
 
-SAFE_REACTIONS = [e for e in START_REACTIONS if e in VALID_REACTIONS]
-if not SAFE_REACTIONS:
-    SAFE_REACTIONS = list(VALID_REACTIONS)
+SAFE_REACTIONS = list(VALID_REACTIONS)
 
 # ---------------- PER-CHAT EMOJI ROTATION ----------------
 chat_used_reactions: Dict[int, Set[str]] = {}
@@ -35,7 +33,6 @@ def next_emoji(chat_id: int) -> str:
         chat_used_reactions[chat_id] = set()
 
     used = chat_used_reactions[chat_id]
-
     if len(used) >= len(SAFE_REACTIONS):
         used.clear()
 
@@ -53,7 +50,7 @@ async def load_custom_mentions():
             name = doc.get("name")
             if name:
                 custom_mentions.add(str(name).lower().lstrip("@"))
-        print(f"[Reaction Manager] Loaded {len(custom_mentions)} mention triggers.")
+        print(f"[Reaction Manager] Loaded {len(custom_mentions)} triggers.")
     except Exception as e:
         print(f"[Reaction Manager] DB load error: {e}")
 
@@ -65,7 +62,6 @@ async def is_admin_or_sudo(client, message: Message) -> Tuple[bool, Optional[str
     chat_id = message.chat.id
     chat_type = str(getattr(message.chat, "type", "")).lower()
 
-    # Owner or sudo
     try:
         sudoers = await get_sudoers()
     except Exception:
@@ -74,7 +70,6 @@ async def is_admin_or_sudo(client, message: Message) -> Tuple[bool, Optional[str
     if user_id and (user_id == OWNER_ID or user_id in sudoers):
         return True, None
 
-    # Channel-Linked admin
     sender_chat_id = getattr(message.sender_chat, "id", None)
     if sender_chat_id:
         try:
@@ -105,11 +100,15 @@ async def add_reaction_name(client, message: Message):
     ok, debug = await is_admin_or_sudo(client, message)
     if not ok:
         return await message.reply_text(
-            f"⚠️ Only admins or sudo users can add reaction triggers.\n\nDebug: {debug}"
+            f"⚠️ Only admins or sudo users can add reaction triggers.\n\nDebug: `{debug}`",
+            parse_mode="markdown"
         )
 
     if len(message.command) < 2:
-        return await message.reply_text("Usage: `/addreact <keyword_or_username>`")
+        return await message.reply_text(
+            "Usage: `/addreact <keyword_or_username>`",
+            parse_mode="markdown"
+        )
 
     raw = message.text.split(None, 1)[1].strip()
     name = raw.lower().lstrip("@")
@@ -133,7 +132,8 @@ async def add_reaction_name(client, message: Message):
     msg = f"✨ Added `{name}`"
     if resolved_id:
         msg += f" (id: `{resolved_id}`)"
-    await message.reply_text(msg)
+
+    await message.reply_text(msg, parse_mode="markdown")
 
 # ---------------- /delreact ----------------
 @app.on_message(filters.command("delreact") & ~BANNED_USERS)
@@ -141,11 +141,15 @@ async def delete_reaction_name(client, message: Message):
     ok, debug = await is_admin_or_sudo(client, message)
     if not ok:
         return await message.reply_text(
-            f"⚠️ Only admins or sudo users can delete reaction triggers.\n\nDebug: {debug}"
+            f"⚠️ Only admins or sudo users can delete reaction triggers.\n\nDebug: `{debug}`",
+            parse_mode="markdown"
         )
 
     if len(message.command) < 2:
-        return await message.reply_text("Usage: `/delreact <keyword_or_username>`")
+        return await message.reply_text(
+            "Usage: `/delreact <keyword_or_username>`",
+            parse_mode="markdown"
+        )
 
     raw = message.text.split(None, 1)[1].strip().lower().lstrip("@")
     removed = False
@@ -167,9 +171,9 @@ async def delete_reaction_name(client, message: Message):
         pass
 
     if removed:
-        await message.reply_text(f"🗑 Removed `{raw}`.")
+        return await message.reply_text(f"🗑 Removed `{raw}`.", parse_mode="markdown")
     else:
-        await message.reply_text(f"❌ `{raw}` not found.")
+        return await message.reply_text(f"❌ `{raw}` not found.", parse_mode="markdown")
 
 # ---------------- /reactlist ----------------
 @app.on_message(filters.command("reactlist") & ~BANNED_USERS)
@@ -178,7 +182,7 @@ async def list_reactions(client, message: Message):
         return await message.reply_text("ℹ️ No triggers found.")
 
     text = "\n".join(f"• `{m}`" for m in sorted(custom_mentions))
-    await message.reply_text(f"**🧠 Reaction Triggers:**\n{text}")
+    await message.reply_text(f"**🧠 Reaction Triggers:**\n{text}", parse_mode="markdown")
 
 # ---------------- /clearreact ----------------
 @app.on_message(filters.command("clearreact") & ~BANNED_USERS)
@@ -186,14 +190,15 @@ async def clear_reactions(client, message: Message):
     ok, debug = await is_admin_or_sudo(client, message)
     if not ok:
         return await message.reply_text(
-            f"⚠️ Only admins or sudo users can clear reactions.\n\nDebug: {debug}"
+            f"⚠️ Only admins or sudo users can clear reactions.\n\nDebug: `{debug}`",
+            parse_mode="markdown"
         )
 
     await COLLECTION.delete_many({})
     custom_mentions.clear()
     await message.reply_text("🧹 Cleared all reaction triggers.")
 
-# ---------------- REACT ON MENTIONS (FIXED) ----------------
+# ---------------- REACT ON MENTIONS (STRICT MODE) ----------------
 @app.on_message((filters.text | filters.caption) & ~BANNED_USERS)
 async def react_on_mentions(client, message: Message):
 
@@ -204,7 +209,7 @@ async def react_on_mentions(client, message: Message):
         chat_id = message.chat.id
         text = (message.text or message.caption or "").lower()
 
-        # Split into exact words (prevents substring triggering)
+        # Exact-word split (prevents substring triggers)
         words = set(text.replace("@", " @").split())
 
         # Extract mentions
@@ -222,17 +227,17 @@ async def react_on_mentions(client, message: Message):
                 if ent.user.username:
                     mentioned_usernames.add(ent.user.username.lower())
 
-        # 1) Username mention triggers
+        # 1) Username triggers
         for uname in mentioned_usernames:
             if uname in custom_mentions:
                 return await message.react(next_emoji(chat_id))
 
-        # 2) ID-based triggers
+        # 2) ID triggers
         for uid in mentioned_ids:
             if f"id:{uid}" in custom_mentions:
                 return await message.react(next_emoji(chat_id))
 
-        # 3) Keyword triggers (whole-word only)
+        # 3) Keyword triggers (EXACT match only)
         for trig in custom_mentions:
             if trig.startswith("id:"):
                 continue
