@@ -196,36 +196,25 @@ async def clear_reactions(client, message: Message):
 # ---------------- REACT ON MENTIONS (STRICT MODE) ----------------
 @app.on_message(
     (filters.text | filters.caption)
-    & ~filters.command([])
+    & ~filters.command([])    # ignore all commands
     & ~BANNED_USERS
 )
 async def react_on_mentions(client, message: Message):
 
     try:
-        # Ignore commands
-        if message.text and message.text.startswith("/"):
-            return
-        
-        if message.text and message.text.startswith("!"):
-            return
+        text_raw = message.text or ""
 
-        if message.text and message.text.startswith("$"):
-            return
-
-        if message.text and message.text.startswith("."):
-            return
-
-        if message.text and message.text.startswith("#"):
-            return
-
-        if message.text and message.text.startswith(" "):
+        # Ignore prefixes (bot commands, special triggers)
+        if text_raw.startswith(("/", "!", "$", ".", "#", " ")):
             return
 
         chat_id = message.chat.id
         text = (message.text or message.caption or "").lower()
 
+        # Split into exact words
         words = set(text.replace("@", " @").split())
 
+        # Collect mentions
         entities = (message.entities or []) + (message.caption_entities or [])
         mentioned_usernames = set()
         mentioned_ids = set()
@@ -240,17 +229,21 @@ async def react_on_mentions(client, message: Message):
                 if ent.user.username:
                     mentioned_usernames.add(ent.user.username.lower())
 
+        # Username triggers
         for uname in mentioned_usernames:
             if uname in custom_mentions:
                 return await message.react(next_emoji(chat_id))
 
+        # ID triggers
         for uid in mentioned_ids:
             if f"id:{uid}" in custom_mentions:
                 return await message.react(next_emoji(chat_id))
 
+        # Keyword triggers
         for trig in custom_mentions:
             if trig.startswith("id:"):
                 continue
+
             if trig in words or f"@{trig}" in words:
                 return await message.react(next_emoji(chat_id))
 
