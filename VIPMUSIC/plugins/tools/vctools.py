@@ -46,7 +46,7 @@ async def brah3(client, message: Message, lang):
         add_link = f"https://t.me/{app.username}?startgroup=true"
 
         await message.reply(
-            f"\n<blockquote>𝐁ʏ. {text}</blockquote>",
+            f"\n{text}",
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton(text=lang["VC_BUTTON"], url=add_link)],
             ])
