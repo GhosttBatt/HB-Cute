@@ -198,7 +198,7 @@ async def clear_reactions(client, message: Message):
 async def react_on_mentions(client, message: Message):
 
     try:
-        if message.text and message.text.startswith("$"):
+        if message.text and message.text.startswith("$"): #Replace $ symbol.So cannot react this name
             return
 
         chat_id = message.chat.id
