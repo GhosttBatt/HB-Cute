@@ -115,30 +115,30 @@ async def send_stats(message, auto_cycle):
     video_count = len(video)
 
     # STATUS LIGHTS
-    audio_light = "🟢" if audio_count > 0 else "🔴"
-    video_light = "🟢" if video_count > 0 else "🔴"
+    audio_light = "🍏" if audio_count > 0 else "🍎"
+    video_light = "🍏" if video_count > 0 else "🍎"
 
     caption = (
-        "📊 **Live VC Statistics**\n"
-        "•━━━━━━━━━━━━━━━━━━•\n"
-        f"{audio_light} 🎧 **Audio Active:** `{audio_count}`\n"
-        f"{video_light} 🎥 **Video Active:** `{video_count}`\n"
-        "•━━━━━━━━━━━━━━━━━━•\n"
-        "⏳ *Refreshing every 10 seconds…*\n" if auto_cycle else ""
+        "<blockquote>💥 **𝐋ɪᴠᴇ 𝐕ᴄ𝐒ᴛᴀᴛ𝗌**</blockquote>\n"
+        "<blockquote>•━━━━━━━━━━━━━━━━━━•\n"
+        f"{audio_light} **𝐀ᴜᴅɪᴏ 𝐂ʜᴀᴛ:** `{audio_count}`\n"
+        f"{video_light} **𝐕ɪᴅᴇᴏ 𝐂ʜᴀᴛ:** `{video_count}`\n"
+        "•━━━━━━━━━━━━━━━━━━•</blockquote>\n"
+        "<blockquote>⏳ **𝐑ᴇғʀᴇ𝗌ʜ 𝐄ᴠᴇʀʏ 10 𝐒ᴇᴄ**</blockquote>\n" if auto_cycle else ""
     )
 
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("🎧 Audio Chats", callback_data="vc_audio_page_1"),
-                InlineKeyboardButton("🎥 Video Chats", callback_data="vc_video_page_1"),
+                InlineKeyboardButton("𝐀ᴜᴅɪᴏ𝐂ʜᴀᴛ", callback_data="vc_audio_page_1"),
+                InlineKeyboardButton("𝐕ɪᴅᴇᴏ𝐂ʜᴀᴛ", callback_data="vc_video_page_1"),
             ],
             [
-                InlineKeyboardButton("🔁 Refresh", callback_data="vc_refresh_manual"),
-                InlineKeyboardButton("⏳ Auto-Refresh", callback_data="vc_enable_autorefresh"),
+                InlineKeyboardButton("🔁 𝐑ᴇғʀᴇ𝗌ʜ", callback_data="vc_refresh_manual"),
+                InlineKeyboardButton("⏳ 𝐀ᴜᴛᴏ𝐑ᴇғʀᴇ𝗌ʜ", callback_data="vc_enable_autorefresh"),
             ],
             [
-                InlineKeyboardButton("❌ Close", callback_data="vc_close"),
+                InlineKeyboardButton("🔻 𝐂ʟᴏ𝗌ᴇ 🔻", callback_data="vc_close"),
             ]
         ]
     )
@@ -157,29 +157,29 @@ async def vc_refresh_manual(client, cq: CallbackQuery):
 
     audio, video = await get_cached_stats()
 
-    audio_light = "🟢" if len(audio) > 0 else "🔴"
-    video_light = "🟢" if len(video) > 0 else "🔴"
+    audio_light = "🍏" if len(audio) > 0 else "🍎"
+    video_light = "🍏" if len(video) > 0 else "🍎"
 
     caption = (
-        "📊 **Live VC Statistics (Refreshed)**\n"
-        "•━━━━━━━━━━━━━━━━━━•\n"
-        f"{audio_light} 🎧 **Audio Active:** `{len(audio)}`\n"
-        f"{video_light} 🎥 **Video Active:** `{len(video)}`\n"
-        "•━━━━━━━━━━━━━━━━━━•"
+        "<blockquote>💥 **𝐋ɪᴠᴇ 𝐕ᴄ𝐒ᴛᴀᴛ𝗌(𝐑ᴇғʀᴇ𝗌ʜ)**</blockquote>\n"
+        "<blockquote>━━━━━━━━━━━━━━━━━━•\n"
+        f"{audio_light} **𝐀ᴜᴅɪᴏ 𝐂ʜᴀᴛ:** `{len(audio)}`\n"
+        f"{video_light} **𝐕ɪᴅᴇᴏ 𝐂ʜᴀᴛ:** `{len(video)}`\n"
+        "•━━━━━━━━━━━━━━━━━━•</blockquote>"
     )
 
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("🎧 Audio Chats", callback_data="vc_audio_page_1"),
-                InlineKeyboardButton("🎥 Video Chats", callback_data="vc_video_page_1"),
+                InlineKeyboardButton("𝐀ᴜᴅɪᴏ 𝐂ʜᴀᴛ", callback_data="vc_audio_page_1"),
+                InlineKeyboardButton("𝐕ɪᴅᴇᴏ 𝐂ʜᴀᴛ", callback_data="vc_video_page_1"),
             ],
             [
-                InlineKeyboardButton("🔁 Refresh", callback_data="vc_refresh_manual"),
-                InlineKeyboardButton("⏳ Auto-Refresh", callback_data="vc_enable_autorefresh"),
+                InlineKeyboardButton("🔁 𝐑ᴇғʀᴇ𝗌ʜ", callback_data="vc_refresh_manual"),
+                InlineKeyboardButton("⏳ 𝐀ᴜᴛᴏ𝐑ᴇғʀᴇ𝗌ʜ", callback_data="vc_enable_autorefresh"),
             ],
             [
-                InlineKeyboardButton("❌ Close", callback_data="vc_close"),
+                InlineKeyboardButton("🔻 𝐂ʟᴏ𝗌ᴇ 🔻", callback_data="vc_close"),
             ]
         ]
     )
@@ -206,26 +206,26 @@ async def vc_enable_autorefresh(client, cq: CallbackQuery):
         try:
             audio, video = await get_cached_stats()
 
-            audio_light = "🟢" if len(audio) > 0 else "🔴"
-            video_light = "🟢" if len(video) > 0 else "🔴"
+            audio_light = "🍏" if len(audio) > 0 else "🍎"
+            video_light = "🍏" if len(video) > 0 else "🍎"
 
             caption = (
-                "📊 **Live VC Statistics (Auto)**\n"
-                "•━━━━━━━━━━━━━━━━━━•\n"
-                f"{audio_light} 🎧 **Audio Active:** `{len(audio)}`\n"
-                f"{video_light} 🎥 **Video Active:** `{len(video)}`\n"
-                "•━━━━━━━━━━━━━━━━━━•\n"
-                "⏳ Auto-refreshing every 10 seconds…"
+                "<blockquote>**💥 𝐋ɪᴠᴇ 𝐕ᴄ𝐒ᴛᴀᴛ𝗌(𝐀ᴜᴛᴏ)**</blockquote>\n"
+                "<blockquote>━━━━━━━━━━━━━━━━━━•\n"
+                f"{audio_light} **𝐀ᴜᴅɪᴏ 𝐂ʜᴀᴛ:** `{len(audio)}`\n"
+                f"{video_light} **𝐕ɪᴅᴇᴏ 𝐂ʜᴀᴛ:** `{len(video)}`\n"
+                "•━━━━━━━━━━━━━━━━━━•</blockquote>\n"
+                "<blockquote>⏳ **𝐑ᴇғʀᴇ𝗌ʜ 𝐄ᴠᴇʀʏ 10 𝐒ᴇᴄ**</blockquote>"
             )
 
             keyboard = InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton("🎧 Audio Chats", callback_data="vc_audio_page_1"),
-                        InlineKeyboardButton("🎥 Video Chats", callback_data="vc_video_page_1"),
+                        InlineKeyboardButton("𝐀ᴜᴅɪᴏ 𝐂ʜᴀᴛ", callback_data="vc_audio_page_1"),
+                        InlineKeyboardButton("𝐕ɪᴅᴇᴏ 𝐂ʜᴀᴛ", callback_data="vc_video_page_1"),
                     ],
                     [
-                        InlineKeyboardButton("🛑 Stop Auto", callback_data="vc_stop_autorefresh"),
+                        InlineKeyboardButton("🔻 𝐒ᴛᴏᴘ 𝐀ᴜᴛᴏ 🔻", callback_data="vc_stop_autorefresh"),
                     ]
                 ]
             )
@@ -269,14 +269,14 @@ async def audio_page(client, cq: CallbackQuery):
 
     buttons = []
     if page > 1:
-        buttons.append(InlineKeyboardButton("⬅ Prev", callback_data=f"vc_audio_page_{page-1}"))
+        buttons.append(InlineKeyboardButton("⤌ 𝐏ʀᴇᴠ", callback_data=f"vc_audio_page_{page-1}"))
     if page < total_pages:
-        buttons.append(InlineKeyboardButton("Next ➡", callback_data=f"vc_audio_page_{page+1}"))
+        buttons.append(InlineKeyboardButton("𝐍ᴇ𝗑ᴛ ⤍", callback_data=f"vc_audio_page_{page+1}"))
 
     rows = []
     if buttons:
         rows.append(buttons)
-    rows.append([InlineKeyboardButton("🔙 Back", callback_data="vc_refresh_manual")])
+    rows.append([InlineKeyboardButton("🔻 𝐁ᴀᴄᴋ 🔻", callback_data="vc_refresh_manual")])
 
     keyboard = InlineKeyboardMarkup(rows)
 
@@ -307,14 +307,14 @@ async def video_page(client, cq: CallbackQuery):
 
     buttons = []
     if page > 1:
-        buttons.append(InlineKeyboardButton("⬅ Prev", callback_data=f"vc_video_page_{page-1}"))
+        buttons.append(InlineKeyboardButton("⤌ 𝐏ʀᴇᴠ", callback_data=f"vc_video_page_{page-1}"))
     if page < total_pages:
-        buttons.append(InlineKeyboardButton("Next ➡", callback_data=f"vc_video_page_{page+1}"))
+        buttons.append(InlineKeyboardButton("𝐍ᴇ𝗑ᴛ ⤍", callback_data=f"vc_video_page_{page+1}"))
 
     rows = []
     if buttons:
         rows.append(buttons)
-    rows.append([InlineKeyboardButton("🔙 Back", callback_data="vc_refresh_manual")])
+    rows.append([InlineKeyboardButton("🔻 𝐁ᴀᴄᴋ 🔻", callback_data="vc_refresh_manual")])
 
     keyboard = InlineKeyboardMarkup(rows)
 
