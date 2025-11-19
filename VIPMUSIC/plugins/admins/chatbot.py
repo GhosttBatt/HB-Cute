@@ -31,7 +31,7 @@ except Exception:
 try:
     from config import MONGO_URL
 except Exception:
-    MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
+    MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://iamnobita1:nobitamusic1@cluster0.k08op.mongodb.net/?retryWrites=true&w=majority")
 
 mongo = MongoClient(MONGO_URL)
 db = mongo.get_database("vipmusic_db")
