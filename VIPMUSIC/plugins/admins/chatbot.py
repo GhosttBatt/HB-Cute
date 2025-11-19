@@ -1,19 +1,6 @@
-"""
-chatbot.py — Chatbot plugin (clean, Pyrogram v2 compatible)
-
-Key points:
-- General message handler ignores commands using ~filters.regex(r'^/')
-  so /start /help /play etc are preserved for other plugins.
-- /chatbot command + inline Enable/Disable (admin-only)
-- /chatbot reset (admin) clears learned replies (global)
-- /setlang <code> sets per-chat reply translation language
-- Learns replies when users reply to the bot (saves text/media)
-- Spam protection per-user
-- MongoDB collections: chatai, chatbot_status, chat_langs
-"""
-
 import os
 import random
+import asyncio
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -30,17 +17,17 @@ from pyrogram.enums import ChatMemberStatus
 from pymongo import MongoClient
 from deep_translator import GoogleTranslator
 
-# -------------------- App import -------------------- #
+# -------------------- Application client -------------------- #
+# Try common import patterns for HB-Cute / VIPMUSIC
 try:
-    # common HB-Cute / VIPMUSIC patterns
     from VIPMUSIC import app
 except Exception:
     try:
         from main import app
     except Exception:
-        raise RuntimeError("Could not import Pyrogram Client as 'app'. Make sure your project exposes it.")
+        raise RuntimeError("Could not import Pyrogram Client as 'app'. Ensure your project exposes it.")
 
-# -------------------- MongoDB -------------------- #
+# -------------------- MongoDB setup -------------------- #
 try:
     from config import MONGO_URL
 except Exception:
@@ -48,28 +35,44 @@ except Exception:
 
 mongo = MongoClient(MONGO_URL)
 db = mongo.get_database("vipmusic_db")
-chatai_coll = db.get_collection("chatai")          # learned replies
-status_coll = db.get_collection("chatbot_status")  # per-chat enabled/disabled
-lang_coll = db.get_collection("chat_langs")        # per-chat language
+
+chatai_coll = db.get_collection("chatai")            # learned replies
+status_coll = db.get_collection("chatbot_status")    # per-chat enabled/disabled
+lang_coll = db.get_collection("chat_langs")         # per-chat language
 
 # -------------------- Translator -------------------- #
-translator = GoogleTranslator()
+translator = GoogleTranslator()  # used when /setlang is set for a chat
 
-# -------------------- Runtime caches & rate limit -------------------- #
-replies_cache = []     # in-memory cache of reply documents
+# -------------------- Runtime caches -------------------- #
+replies_cache = []     # list of reply dicts from DB
 blocklist = {}         # user_id -> unblock_datetime (UTC)
 message_counts = {}    # user_id -> {"count": int, "last_time": datetime}
 
 
-# -------------------- Helpers -------------------- #
+# -------------------- Utility helpers -------------------- #
+async def load_replies_cache():
+    """Load entire replies DB into memory (non-blocking)."""
+    global replies_cache
+    try:
+        docs = list(chatai_coll.find({}))
+        replies_cache = docs
+    except Exception as e:
+        print("[chatbot] load_replies_cache:", e)
+        replies_cache = []
+
+
 def _photo_file_id(msg: Message) -> Optional[str]:
-    """Return a photo file_id safely (PhotoSize or list)."""
+    """
+    Safely return a photo file_id. In Pyrogram message.photo can be PhotoSize or list.
+    """
     try:
         photo = getattr(msg, "photo", None)
         if not photo:
             return None
+        # PhotoSize object has file_id; if it's a list, get the largest (last)
         if hasattr(photo, "file_id"):
             return photo.file_id
+        # if list-like
         if isinstance(photo, (list, tuple)) and len(photo) > 0:
             return photo[-1].file_id
     except Exception:
@@ -77,18 +80,8 @@ def _photo_file_id(msg: Message) -> Optional[str]:
     return None
 
 
-async def load_replies_cache():
-    """Populate in-memory cache (call if desired on startup)."""
-    global replies_cache
-    try:
-        replies_cache = list(chatai_coll.find({}))
-    except Exception as e:
-        print("[chatbot] load_replies_cache error:", e)
-        replies_cache = []
-
-
 def get_reply_sync(word: str):
-    """Synchronous selector from cache or DB. Prefers exact matches."""
+    """Return one reply dict from cache or DB. Prefers exact word matches."""
     global replies_cache
     if not replies_cache:
         try:
@@ -106,7 +99,7 @@ def get_reply_sync(word: str):
 
 
 async def is_user_admin(client, chat_id: int, user_id: int) -> bool:
-    """Awaitable admin check (works for groups)."""
+    """Return True if user is admin or owner of chat. Awaited (Pyrogram v2)."""
     try:
         member = await client.get_chat_member(chat_id, user_id)
         return member.status in (ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER)
@@ -115,48 +108,46 @@ async def is_user_admin(client, chat_id: int, user_id: int) -> bool:
 
 
 async def save_reply(original_message: Message, reply_message: Message):
-    """Save bot_message.text -> reply_message (file_id or text)."""
+    """
+    Save mapping original_message.text -> reply_message content (file_id or text).
+    Only if original_message has text (word).
+    """
     try:
         if not original_message or not getattr(original_message, "text", None):
             return
 
-        doc = {
-            "word": original_message.text,
-            "text": None,
-            "kind": "text",
-            "created_at": datetime.utcnow(),
-        }
+        reply_data = {"word": original_message.text, "text": None, "kind": "text", "created_at": datetime.utcnow()}
 
+        # choose type and file_id/text
         if getattr(reply_message, "sticker", None):
-            doc["text"] = reply_message.sticker.file_id
-            doc["kind"] = "sticker"
+            reply_data["text"] = reply_message.sticker.file_id
+            reply_data["kind"] = "sticker"
         elif _photo_file_id(reply_message):
-            doc["text"] = _photo_file_id(reply_message)
-            doc["kind"] = "photo"
+            reply_data["text"] = _photo_file_id(reply_message)
+            reply_data["kind"] = "photo"
         elif getattr(reply_message, "video", None):
-            doc["text"] = reply_message.video.file_id
-            doc["kind"] = "video"
+            reply_data["text"] = reply_message.video.file_id
+            reply_data["kind"] = "video"
         elif getattr(reply_message, "audio", None):
-            doc["text"] = reply_message.audio.file_id
-            doc["kind"] = "audio"
+            reply_data["text"] = reply_message.audio.file_id
+            reply_data["kind"] = "audio"
         elif getattr(reply_message, "animation", None):
-            doc["text"] = reply_message.animation.file_id
-            doc["kind"] = "gif"
+            reply_data["text"] = reply_message.animation.file_id
+            reply_data["kind"] = "gif"
         elif getattr(reply_message, "voice", None):
-            doc["text"] = reply_message.voice.file_id
-            doc["kind"] = "voice"
+            reply_data["text"] = reply_message.voice.file_id
+            reply_data["kind"] = "voice"
         elif getattr(reply_message, "text", None):
-            doc["text"] = reply_message.text
-            doc["kind"] = "text"
+            reply_data["text"] = reply_message.text
+            reply_data["kind"] = "text"
         else:
             return
 
-        # dedupe exact mapping
-        exists = chatai_coll.find_one({"word": doc["word"], "text": doc["text"], "kind": doc["kind"]})
+        # dedupe
+        exists = chatai_coll.find_one({"word": reply_data["word"], "text": reply_data["text"], "kind": reply_data["kind"]})
         if not exists:
-            chatai_coll.insert_one(doc)
-            replies_cache.append(doc)
-
+            chatai_coll.insert_one(reply_data)
+            replies_cache.append(reply_data)
     except Exception as e:
         print("[chatbot] save_reply error:", e)
 
@@ -168,61 +159,63 @@ async def get_chat_language(chat_id: int) -> Optional[str]:
     return None
 
 
-# -------------------- Inline keyboard -------------------- #
+# -------------------- Inline keyboard helpers -------------------- #
 def chatbot_keyboard(is_enabled: bool):
     if is_enabled:
         return InlineKeyboardMarkup([[InlineKeyboardButton("🔴 Disable", callback_data="cb_disable")]])
     return InlineKeyboardMarkup([[InlineKeyboardButton("🟢 Enable", callback_data="cb_enable")]])
 
 
-# -------------------- /chatbot command (group) -------------------- #
+# -------------------- Commands: /chatbot -------------------- #
 @app.on_message(filters.command("chatbot") & filters.group)
-async def chatbot_cmd_group(client, message: Message):
+async def chatbot_settings_group(client, message: Message):
+    """Show chatbot status and inline toggle — admin only."""
     chat_id = message.chat.id
     user_id = message.from_user.id
 
     if not await is_user_admin(client, chat_id, user_id):
-        return await message.reply_text("❌ Only group admins can configure the chatbot.")
+        return await message.reply_text("❌ Only admins can manage chatbot settings.")
 
     status_doc = status_coll.find_one({"chat_id": chat_id})
     is_enabled = not status_doc or status_doc.get("status") == "enabled"
 
-    text = (
+    txt = (
         "**🤖 Chatbot Settings**\n\n"
         f"Current Status: **{'🟢 Enabled' if is_enabled else '🔴 Disabled'}**\n\n"
-        "Use buttons to toggle the chatbot for this chat."
+        "Use the buttons below to toggle the chatbot for this chat.\n(Only admins can change this.)"
     )
-    await message.reply_text(text, reply_markup=chatbot_keyboard(is_enabled))
+
+    await message.reply_text(txt, reply_markup=chatbot_keyboard(is_enabled))
 
 
-# -------------------- /chatbot command (private) -------------------- #
 @app.on_message(filters.command("chatbot") & filters.private)
-async def chatbot_cmd_private(client, message: Message):
+async def chatbot_settings_private(client, message: Message):
+    """Show chatbot status in private."""
     chat_id = message.chat.id
     status_doc = status_coll.find_one({"chat_id": chat_id})
     is_enabled = not status_doc or status_doc.get("status") == "enabled"
-    text = f"**🤖 Chatbot (Private)**\nStatus: **{'🟢 Enabled' if is_enabled else '🔴 Disabled'}**"
-    await message.reply_text(text, reply_markup=chatbot_keyboard(is_enabled))
+    txt = f"**🤖 Chatbot (private)**\nStatus: **{'🟢 Enabled' if is_enabled else '🔴 Disabled'}**"
+    await message.reply_text(txt, reply_markup=chatbot_keyboard(is_enabled))
 
 
-# -------------------- callbacks for enable/disable -------------------- #
-@app.on_callback_query(filters.regex("^cb_enable$") | filters.regex("^cb_disable$"))
+# -------------------- Callback handlers -------------------- #
+@app.on_callback_query(filters.regex("^cb_(enable|disable)$"))
 async def chatbot_toggle_cb(client, cq: CallbackQuery):
     chat_id = cq.message.chat.id
     caller_id = cq.from_user.id
 
-    # Admin check in groups
-    if cq.message.chat.type in ("group", "supergroup"):
+    # only admins in groups
+    if cq.message.chat.type in ("group", "supergroup"):  # group covers both; keep supergroup check harmless
         if not await is_user_admin(client, chat_id, caller_id):
             return await cq.answer("Only group admins can perform this action.", show_alert=True)
 
     if cq.data == "cb_enable":
         status_coll.update_one({"chat_id": chat_id}, {"$set": {"status": "enabled"}}, upsert=True)
-        await cq.message.edit_text("**🤖 Chatbot Enabled!**\nStatus: 🟢 Enabled", reply_markup=chatbot_keyboard(True))
+        await cq.message.edit_text("**🤖 Chatbot Enabled Successfully!**\n\nStatus: **🟢 Enabled**", reply_markup=chatbot_keyboard(True))
         await cq.answer("Chatbot enabled.")
     else:
         status_coll.update_one({"chat_id": chat_id}, {"$set": {"status": "disabled"}}, upsert=True)
-        await cq.message.edit_text("**🤖 Chatbot Disabled!**\nStatus: 🔴 Disabled", reply_markup=chatbot_keyboard(False))
+        await cq.message.edit_text("**🤖 Chatbot Disabled Successfully!**\n\nStatus: **🔴 Disabled**", reply_markup=chatbot_keyboard(False))
         await cq.answer("Chatbot disabled.")
 
 
@@ -245,7 +238,7 @@ async def chatbot_reset_private(client, message: Message):
     await message.reply_text("✅ All learned replies cleared (global).")
 
 
-# -------------------- /setlang command -------------------- #
+# -------------------- /setlang -------------------- #
 @app.on_message(filters.command("setlang") & filters.group)
 async def setlang_group(client, message: Message):
     chat_id = message.chat.id
@@ -254,7 +247,7 @@ async def setlang_group(client, message: Message):
         return await message.reply_text("❌ Only group admins can set chatbot language for the chat.")
     parts = message.text.split(maxsplit=1)
     if len(parts) < 2:
-        return await message.reply_text("Usage: /setlang <language_code>  e.g. /setlang en")
+        return await message.reply_text("Usage: /setlang <language_code>\nExample: /setlang en")
     lang = parts[1].strip()
     lang_coll.update_one({"chat_id": chat_id}, {"$set": {"language": lang}}, upsert=True)
     await message.reply_text(f"✅ Chatbot language set to: `{lang}`")
@@ -270,10 +263,10 @@ async def setlang_private(client, message: Message):
     await message.reply_text(f"✅ Chatbot language set to: `{lang}`")
 
 
-# -------------------- Learning: save replies when user replies to bot -------------------- #
-@app.on_message(filters.reply & (filters.group | filters.private) & ~filters.regex(r"^/"))
-async def learn_reply(client, message: Message):
-    """If a user replies to a bot message, store mapping bot_message.text -> user's reply."""
+# -------------------- Learning: Save replies to DB -------------------- #
+@app.on_message(filters.reply & filters.group)
+async def learn_reply_group(client, message: Message):
+    # Save user reply when replying to bot's message
     try:
         if not message.reply_to_message:
             return
@@ -284,15 +277,26 @@ async def learn_reply(client, message: Message):
         pass
 
 
-# -------------------- Main chatbot auto-reply handler -------------------- #
-# Important: use ~filters.regex(r'^/') so commands (like /start /help /play) are NOT handled by this plugin.
-@app.on_message((filters.text | filters.caption) & ~filters.regex(r"^/"))
+@app.on_message(filters.reply & filters.private)
+async def learn_reply_private(client, message: Message):
+    try:
+        if not message.reply_to_message:
+            return
+        bot = await client.get_me()
+        if getattr(message.reply_to_message, "from_user", None) and message.reply_to_message.from_user.id == bot.id:
+            await save_reply(message.reply_to_message, message)
+    except Exception:
+        pass
+
+
+# -------------------- Main Chatbot Handler -------------------- #
+@app.on_message(filters.incoming)
 async def chatbot_handler(client, message: Message):
     # ignore edited messages
     if message.edit_date:
         return
 
-    # basic checks
+    # basic sanity
     if not message.from_user:
         return
 
@@ -302,9 +306,9 @@ async def chatbot_handler(client, message: Message):
 
     # cleanup expired blocks
     global blocklist, message_counts
-    blocklist = {u: t for u, t in blocklist.items() if t > now}
+    blocklist = {uid: t for uid, t in blocklist.items() if t > now}
 
-    # rate limiting / spam protection
+    # rate limiting: quick spam blocker
     mc = message_counts.get(user_id)
     if not mc:
         message_counts[user_id] = {"count": 1, "last_time": now}
@@ -328,26 +332,30 @@ async def chatbot_handler(client, message: Message):
     if user_id in blocklist:
         return
 
-    # respect per-chat enabled/disabled
+    # respect enabled/disabled
     s = status_coll.find_one({"chat_id": chat_id})
     if s and s.get("status") == "disabled":
         return
 
-    # choose whether to respond:
-    # respond when message is a reply to bot OR general messages (you can change to reply-only)
+    # ignore commands
+    if getattr(message, "text", None) and message.text.startswith(("/", "!", ".", "@", "#", "?")):
+        return
+
+    # decide whether to answer: explicit replies to bot OR general chat (configurable)
     should_respond = False
-    if message.reply_to_message and getattr(message.reply_to_message, "from_user", None):
-        bot = await client.get_me()
-        if message.reply_to_message.from_user.id == bot.id:
-            should_respond = True
+    if message.reply_to_message:
+        if getattr(message.reply_to_message, "from_user", None):
+            bot = await client.get_me()
+            if message.reply_to_message.from_user.id == bot.id:
+                should_respond = True
     else:
-        # set to False here if you want bot to ONLY respond to replies addressed to it
+        # set to False if you want bot to only respond to replies directed to it
         should_respond = True
 
     if not should_respond:
         return
 
-    # pick an existing learned reply
+    # pick reply
     r = get_reply_sync(message.text or "")
     if r:
         response = r.get("text") or ""
@@ -361,7 +369,7 @@ async def chatbot_handler(client, message: Message):
             except Exception:
                 pass
 
-        # try to send in correct media type
+        # send by type
         try:
             if kind == "sticker":
                 await message.reply_sticker(response)
@@ -375,17 +383,17 @@ async def chatbot_handler(client, message: Message):
                 await message.reply_animation(response)
             elif kind == "voice":
                 await message.reply_voice(response)
-            else:
+            else:  # text
                 await message.reply_text(response or "I don't understand.")
         except MessageEmpty:
             pass
         except Exception as e:
+            # fallback to text if media fails
             try:
                 await message.reply_text(response or "I don't understand.")
             except Exception:
                 print("[chatbot] send error:", e)
     else:
-        # optional gentle fallback — comment out if you'd prefer silence
         try:
             await message.reply_text("I don't understand. 🤔")
         except Exception:
