@@ -61,6 +61,7 @@ telegraph==2.2.0
 telethon==1.33.1
 tgcrypto==1.2.5
 Unidecode==1.4.0
+urllib3==2.2.3
 wget==3.2
 youtube-search-python==1.6.6
 youtube_dl==2021.12.17
