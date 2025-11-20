@@ -1,6 +1,7 @@
 aiofiles
 aiohttp==3.9.3         # CUTE old and new
 asyncio==3.4.3         # CUTE old and  new
+bard
 beautifulsoup4
 blackpink
 deepai
@@ -14,6 +15,7 @@ pydub
 pycountry
 pornhub-api==0.2.0
 heroku3
+lyricsgenius
 apscheduler                
 motor
 opencv-python-headless==4.9.0.80
@@ -23,20 +25,20 @@ wget
 pyfiglet
 qrcode
 pytz
-future>=0.18.3        # CUTE, SHUKLA 1.0.0, 
+future==0.18.3        # CUTE, SHUKLA 1.0.0, 
 search_engine_parser
 pyrogram==2.0.106
 py-tgcalls==0.9.7
 pykeyboard
 pyshorteners
-python-dotenv==1.0.1          # CUTE
+python-dotenv
 pyyaml==6.0.1
 pyfiglet
 requests
 emojis
 speedtest-cli
 spotipy
-tgcrypto==1.2.5        # CUTE
+tgcrypto
 telethon==1.33.1
 telegraph==2.2.0
 unidecode
@@ -45,7 +47,7 @@ youtube_search
 youtube-search-python
 gtts
 lexica-api==1.4.7
-httpx==0.27.0           # CUTE, SHUKLA =>0.28.1
+httpx==0.25.2           # CUTE, SHUKLA =>0.28.1
 gpytranslate
 openai==0.28.0
 mpv
