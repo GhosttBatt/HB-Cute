@@ -1,4 +1,4 @@
-aiofiles
+aiofiles==25.1.0
 aiohttp==3.10.11
 aiosqlite
 apscheduler
@@ -27,7 +27,7 @@ lyricsgenius==3.0.0
 mpv
 moviepy
 MukeshAPI
-motor==3.4.0
+motor==3.7.1
 mysql-connector-python==9.0.0
 ntgcalls==1.1.2
 opencv-python-headless==4.10.0.84
