@@ -173,7 +173,15 @@ async def cmd_today(_, message: Message):
         items.append((name, cnt))
 
     text = format_leaderboard("Leaderboard Today", items)
-    kb = InlineKeyboardMarkup([[InlineKeyboardButton("Overall", callback_data="overall")]])
+    kb = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Overall", callback_data="overall")],
+            [
+                InlineKeyboardButton("Monthly", callback_data="monthly"),
+                InlineKeyboardButton("Weekly", callback_data="weekly"),
+            ],
+        ]
+    )
     try:
         await message.reply_photo(RANKING_PIC, caption=text, reply_markup=kb)
     except Exception:
@@ -192,7 +200,15 @@ async def cmd_ranking(_, message: Message):
         items.append((name, int(row.get("total_messages", 0))))
 
     text = format_leaderboard("Leaderboard (Global)", items)
-    kb = InlineKeyboardMarkup([[InlineKeyboardButton("Today", callback_data="today")]])
+    kb = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Today", callback_data="today")],
+            [
+                InlineKeyboardButton("Monthly", callback_data="monthly"),
+                InlineKeyboardButton("Weekly", callback_data="weekly"),
+            ],
+        ]
+    )
     try:
         await message.reply_photo(RANKING_PIC, caption=text, reply_markup=kb)
     except Exception:
@@ -228,7 +244,15 @@ async def cmd_weeklyrank(_, message: Message):
         items.append((name, int(row.get("weekly_messages", 0))))
 
     text = format_leaderboard("Leaderboard (Weekly)", items)
-    kb = InlineKeyboardMarkup([[InlineKeyboardButton("Today", callback_data="today")]])
+    kb = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Today", callback_data="today")],
+            [
+                InlineKeyboardButton("Overall", callback_data="overall"),
+                InlineKeyboardButton("Monthly", callback_data="monthly"),
+            ],
+        ]
+    )
     try:
         await message.reply_photo(RANKING_PIC, caption=text, reply_markup=kb)
     except Exception:
@@ -247,7 +271,15 @@ async def cmd_monthlyrank(_, message: Message):
         items.append((name, int(row.get("monthly_messages", 0))))
 
     text = format_leaderboard("Leaderboard (Monthly)", items)
-    kb = InlineKeyboardMarkup([[InlineKeyboardButton("Today", callback_data="today")]])
+    kb = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Today", callback_data="today")],
+            [
+                InlineKeyboardButton("Overall", callback_data="overall"),
+                InlineKeyboardButton("Weekly", callback_data="weekly"),
+            ],
+        ]
+    )
     try:
         await message.reply_photo(RANKING_PIC, caption=text, reply_markup=kb)
     except Exception:
@@ -273,7 +305,15 @@ async def cb_today(_, query: CallbackQuery):
         items.append((name, cnt))
 
     text = format_leaderboard("Leaderboard Today", items)
-    kb = InlineKeyboardMarkup([[InlineKeyboardButton("Overall", callback_data="overall")]])
+    kb = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Overall", callback_data="overall")],
+            [
+                InlineKeyboardButton("Monthly", callback_data="monthly"),
+                InlineKeyboardButton("Weekly", callback_data="weekly"),
+            ],
+        ]
+    )
 
     try:
         await query.message.edit_text(text, reply_markup=kb)
@@ -293,12 +333,76 @@ async def cb_overall(_, query: CallbackQuery):
         items.append((name, int(row.get("total_messages", 0))))
 
     text = format_leaderboard("Leaderboard (Global)", items)
-    kb = InlineKeyboardMarkup([[InlineKeyboardButton("Today", callback_data="today")]])
+    kb = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Today", callback_data="today")],
+            [
+                InlineKeyboardButton("Monthly", callback_data="monthly"),
+                InlineKeyboardButton("Weekly", callback_data="weekly"),
+            ],
+        ]
+    )
 
     try:
         await query.message.edit_text(text, reply_markup=kb)
     except Exception:
         await query.answer("Unable to edit message.", show_alert=True)
+
+
+@app.on_callback_query(filters.regex("^monthly$"))
+async def cb_monthly(_, q: CallbackQuery):
+    top = await db_get_top("monthly_messages", 10)
+    if not top:
+        return await q.answer("No monthly data.", show_alert=True)
+
+    items = []
+    for row in top:
+        name = await resolve_name(row["_id"])
+        items.append((name, int(row.get("monthly_messages", 0))))
+
+    text = format_leaderboard("Leaderboard (Monthly)", items)
+    kb = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Today", callback_data="today")],
+            [
+                InlineKeyboardButton("Overall", callback_data="overall"),
+                InlineKeyboardButton("Weekly", callback_data="weekly"),
+            ],
+        ]
+    )
+
+    try:
+        await q.message.edit_text(text, reply_markup=kb)
+    except Exception:
+        await q.answer("Error editing", show_alert=True)
+
+
+@app.on_callback_query(filters.regex("^weekly$"))
+async def cb_weekly(_, q: CallbackQuery):
+    top = await db_get_top("weekly_messages", 10)
+    if not top:
+        return await q.answer("No weekly data.", show_alert=True)
+
+    items = []
+    for row in top:
+        name = await resolve_name(row["_id"])
+        items.append((name, int(row.get("weekly_messages", 0))))
+
+    text = format_leaderboard("Leaderboard (Weekly)", items)
+    kb = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Today", callback_data="today")],
+            [
+                InlineKeyboardButton("Overall", callback_data="overall"),
+                InlineKeyboardButton("Monthly", callback_data="monthly"),
+            ],
+        ]
+    )
+
+    try:
+        await q.message.edit_text(text, reply_markup=kb)
+    except Exception:
+        await q.answer("Error editing", show_alert=True)
 
 
 # -------------------------------------------------------------------
@@ -321,7 +425,7 @@ async def collect_group_chats() -> List[int]:
 
 
 async def build_post_texts() -> Tuple[str, str, str]:
-    """Return (daily_text_unused, weekly_text, monthly_text) pre-built strings."""
+    """Return (global_text, weekly_text, monthly_text) pre-built strings."""
     # GLOBAL (used for global postings)
     top_global = await db_get_top("total_messages", 10)
     items_global = []
@@ -380,7 +484,15 @@ async def post_daily_leaderboards():
                 name = await resolve_name(uid)
                 items.append((name, cnt))
             text_chat = format_leaderboard("Leaderboard Today", items)
-            kb = InlineKeyboardMarkup([[InlineKeyboardButton("Overall", callback_data="overall")]])
+            kb = InlineKeyboardMarkup(
+                [
+                    [InlineKeyboardButton("Overall", callback_data="overall")],
+                    [
+                        InlineKeyboardButton("Monthly", callback_data="monthly"),
+                        InlineKeyboardButton("Weekly", callback_data="weekly"),
+                    ],
+                ]
+            )
             try:
                 await app.send_photo(chat_id, RANKING_PIC, caption=text_chat, reply_markup=kb)
             except Exception:
@@ -390,7 +502,15 @@ async def post_daily_leaderboards():
                     print(f"[ranking] failed to post today to {chat_id}: {e}")
 
         # Also post global leaderboard for every group
-        kb2 = InlineKeyboardMarkup([[InlineKeyboardButton("Today", callback_data="today")]])
+        kb2 = InlineKeyboardMarkup(
+            [
+                [InlineKeyboardButton("Today", callback_data="today")],
+                [
+                    InlineKeyboardButton("Monthly", callback_data="monthly"),
+                    InlineKeyboardButton("Weekly", callback_data="weekly"),
+                ],
+            ]
+        )
         try:
             await app.send_photo(chat_id, RANKING_PIC, caption=text_global, reply_markup=kb2)
         except Exception:
