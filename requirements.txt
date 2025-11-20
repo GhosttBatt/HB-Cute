@@ -24,6 +24,7 @@ qrcode
 pytz
 future=>0.18.3        # CUTE, SHUKLA 1.0.0, 
 search_engine_parser
+pyrogram==2.0.106
 py-tgcalls==0.9.7
 pykeyboard
 pyshorteners
