@@ -1,7 +1,7 @@
 aiofiles
 aiohttp==3.9.3         # CUTE old and new
 asyncio==3.4.3         # CUTE old and  new
-motor
+motor>=3.0
 beautifulsoup4
 blackpink
 deepai
