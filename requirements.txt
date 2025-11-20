@@ -28,7 +28,6 @@ pyrogram==2.0.106
 py-tgcalls==0.9.7
 pykeyboard
 pyshorteners
-pysocks==1.7.1
 python-dotenv==1.0.1          # CUTE
 pyyaml==6.0.1
 requests
@@ -53,7 +52,6 @@ python-telegram-bot==21.1.1
 stripe==10.7.0
 mysql-connector-python==9.0.0
 telebot==0.0.5
-urllib3==2.2.3
 youtube_dl==2021.12.17  # from SHUKLA
 bing_image_downloader
 bs4
