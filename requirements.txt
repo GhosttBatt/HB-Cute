@@ -1,7 +1,6 @@
 aiofiles
 aiohttp==3.9.3         # CUTE old and new
 asyncio==3.4.3         # CUTE old and  new
-motor>=3.0
 beautifulsoup4
 blackpink
 deepai
@@ -15,6 +14,7 @@ pydub
 pycountry
 heroku3
 apscheduler                
+motor
 opencv-python-headless==4.9.0.80
 pillow==9.5.0
 psutil
