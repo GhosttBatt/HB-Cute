@@ -6,6 +6,7 @@ beautifulsoup4
 blackpink
 deepai
 pytube
+motor
 dnspython==2.3.0       # CUTE old and new
 ffmpeg-python
 gitpython
@@ -17,7 +18,7 @@ pornhub-api==0.2.0
 heroku3
 lyricsgenius
 apscheduler                
-motor
+# motor #moved to docker
 opencv-python-headless==4.9.0.80
 pillow==9.5.0
 psutil
@@ -52,7 +53,7 @@ gpytranslate
 openai==0.28.0
 mpv
 moviepy
-python-telegram-bot==21.1.1
+#python-telegram-bot==21.1.1
 stripe==10.7.0
 mysql-connector-python==9.0.0
 telebot==0.0.5
@@ -61,7 +62,8 @@ bing_image_downloader
 bs4
 cloudscraper
 flask==2.2.2   #keep_alive         # CUTE
-pymongo[srv]==3.12.3
+pymongo
+#pymongo[srv]==3.12.3
 kurigram
 git+https://github.com/AsmSafone/SafoneAPI
 SafoneAPI
