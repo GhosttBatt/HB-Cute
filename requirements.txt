@@ -18,7 +18,6 @@ pornhub-api==0.2.0
 heroku3
 lyricsgenius
 apscheduler                
-# motor #moved to docker
 opencv-python-headless==4.9.0.80
 pillow==9.5.0
 psutil
