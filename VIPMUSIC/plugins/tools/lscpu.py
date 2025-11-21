@@ -178,7 +178,7 @@ async def lscpu_cmd(client, message: Message, _):
         await status.edit_text(f"<code>{e}</code>")
         return
 
-    # Build a readable message (HTML-safe)
+    # Build a readable message
     parts = []
     parts.append(f"<b>OS</b>: <code>{info.get('OS')}</code>")
     parts.append(f"<b>Platform</b>: <code>{info.get('Platform')}</code>")
@@ -205,5 +205,5 @@ async def lscpu_cmd(client, message: Message, _):
         parts[5] = "<b>CPU</b>:\n<pre>{}</pre>".format(cpu)
         text = "\n\n".join(parts)
 
-    await message.reply_text(text, disable_web_page_preview=True, parse_mode="html")
+    await message.reply_text(text, disable_web_page_preview=True) #, parse_mode="html")
     await status.delete()
